@@ -1,0 +1,71 @@
+﻿@model anthR.Web.Models.Todo.TodoItem
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <a href="#" onclick="history.go(-1); return false;" class="btn btn-sm btn-primary" role="button"><i class="glyphicon glyphicon-circle-arrow-left"></i> Go Back</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+
+        <table class="table">
+            <caption>Todo Details</caption>
+            <tr>
+                <th>
+                    Master Site
+                </th>
+                <th>
+                    @Html.DisplayFor(model => model.MasterSite.Name)
+                </th>
+            </tr>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <td>
+                    @Html.DisplayFor(model => model.Title)
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <td>
+                    @Html.DisplayFor(model => model.Description)
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsDone)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => model.IsDone)
+                </th>
+            </tr>
+
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Priority)
+                </th>
+                <th>
+                    @Html.DisplayFor(model => model.Priority)
+                </th>
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    @Html.ActionLink("Edit", "Edit", "Todo", new { id = Model.Id }, new { @class = "btn btn-sm btn-primary", role = "button" })
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+</div>

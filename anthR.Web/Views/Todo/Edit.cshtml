@@ -1,0 +1,42 @@
+﻿@model anthR.Web.Models.Todo.TodoItem
+
+@{
+    ViewBag.Title = "Edit a Todo Item";
+}
+
+@using (Html.BeginForm("Edit", "ToDo", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken();
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Title, new { @class = "col-sm-1 control-label" })
+        <div class="col-sm-3">
+            @Html.EditorFor(x => x.Title)
+        </div>        
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Description, new { @class = "col-sm-1 control-label" })
+        <div class="col-sm-3">
+            @Html.EditorFor(x => x.Description)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Deadline, new { @class = "col-sm-1 control-label" })
+        <div class="col-sm-3">
+            @Html.EditorFor(x => x.Deadline)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.IsDone, new { @class = "col-sm-1 control-label" })
+        <div class="col-sm-3">
+            @Html.EditorFor(x => x.IsDone)
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+}

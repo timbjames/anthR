@@ -1,0 +1,16 @@
+﻿@model IEnumerable<anthR.ToDo.Mvc.Models.TodoItem>
+
+<table class="table">
+    <caption>@*Priority @ViewBag.Priority Tasks*@@ViewBag.PriorityMessage</caption>
+    <tr>
+        <th>Task</th>
+    </tr>
+    @foreach (var todo in Model)
+    {
+        <tr>
+            <td>
+                @todo.Title
+            </td>
+        </tr>
+    }
+</table>

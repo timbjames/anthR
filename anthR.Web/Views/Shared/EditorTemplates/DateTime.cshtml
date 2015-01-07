@@ -1,0 +1,7 @@
+﻿@* bootstrap datetime picker https://github.com/Eonasdan/bootstrap-datetimepicker/wiki/Installation *@
+
+<div class="input-group date datetimepicker">
+    @Html.TextBox(string.Empty, ViewContext.ViewData.TemplateInfo.FormattedModelValue, new { @class = "form-control", data_date_format = "DD/MM/YYYY hh:mm" })
+    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+</div>
+
