@@ -18,9 +18,11 @@ namespace anthR.Web.Models.Todo
         public string Description { get; set; }
         public DateTime? Deadline { get; set; }
 
-        public int MasterSiteId { get; set; }
-                
+        public int MasterSiteId { get; set; }                
         public virtual Core.MasterSite MasterSite { get; set; }
+
+        public int StatusId { get; set; }
+        public virtual Core.Status Status { get; set; }
 
     }
 

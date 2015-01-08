@@ -127,13 +127,45 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\StaffController.cs" />
+    <Compile Include="Controllers\TasksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MasterSiteController.cs" />
     <Compile Include="Controllers\NotesController.cs" />
+    <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\ToDoController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201501081040579_InitialCreate.cs" />
+    <Compile Include="Migrations\201501081040579_InitialCreate.Designer.cs">
+      <DependentUpon>201501081040579_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501081057272_Extra-Project-Details.cs" />
+    <Compile Include="Migrations\201501081057272_Extra-Project-Details.Designer.cs">
+      <DependentUpon>201501081057272_Extra-Project-Details.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501081059541_AddStatus.cs" />
+    <Compile Include="Migrations\201501081059541_AddStatus.Designer.cs">
+      <DependentUpon>201501081059541_AddStatus.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501081114508_StatusGlyphicon.cs" />
+    <Compile Include="Migrations\201501081114508_StatusGlyphicon.Designer.cs">
+      <DependentUpon>201501081114508_StatusGlyphicon.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501081122567_StatusGlyphiconUpdate.cs" />
+    <Compile Include="Migrations\201501081122567_StatusGlyphiconUpdate.Designer.cs">
+      <DependentUpon>201501081122567_StatusGlyphiconUpdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501081131416_Add_Task_Todo_Status.cs" />
+    <Compile Include="Migrations\201501081131416_Add_Task_Todo_Status.Designer.cs">
+      <DependentUpon>201501081131416_Add_Task_Todo_Status.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501081141162_Add_Name_Status.cs" />
+    <Compile Include="Migrations\201501081141162_Add_Name_Status.Designer.cs">
+      <DependentUpon>201501081141162_Add_Name_Status.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Core\anthRContext.cs" />
     <Compile Include="Models\Core\MasterSite.cs" />
     <Compile Include="Models\Core\MasterSiteEditModel.cs" />
@@ -142,6 +174,7 @@
     <Compile Include="Models\Core\Staff.cs" />
     <Compile Include="Models\Core\StaffOnProjects.cs" />
     <Compile Include="Models\Core\StaffOnTask.cs" />
+    <Compile Include="Models\Core\Status.cs" />
     <Compile Include="Models\Notes\Note.cs" />
     <Compile Include="Models\Seed\anthRInitializer.cs" />
     <Compile Include="Models\Task\AnthRTask.cs" />
@@ -218,6 +251,24 @@
     <Content Include="Views\Notes\Index.cshtml" />
     <Content Include="Views\Notes\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_NotesLayout.cshtml" />
+    <Content Include="Views\Projects\Create.cshtml" />
+    <Content Include="Views\Projects\Delete.cshtml" />
+    <Content Include="Views\Projects\Details.cshtml" />
+    <Content Include="Views\Projects\Edit.cshtml" />
+    <Content Include="Views\Projects\Index.cshtml" />
+    <Content Include="Views\Tasks\Create.cshtml" />
+    <Content Include="Views\Tasks\Delete.cshtml" />
+    <Content Include="Views\Tasks\Details.cshtml" />
+    <Content Include="Views\Tasks\Edit.cshtml" />
+    <Content Include="Views\Tasks\Index.cshtml" />
+    <Content Include="Views\Shared\_TaskLayout.cshtml" />
+    <Content Include="Views\Staff\Create.cshtml" />
+    <Content Include="Views\Staff\Delete.cshtml" />
+    <Content Include="Views\Staff\Details.cshtml" />
+    <Content Include="Views\Staff\Edit.cshtml" />
+    <Content Include="Views\Staff\Index.cshtml" />
+    <Content Include="Views\Shared\_StaffLayout.cshtml" />
+    <Content Include="Views\Staff\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -228,6 +279,29 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201501081040579_InitialCreate.resx">
+      <DependentUpon>201501081040579_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501081057272_Extra-Project-Details.resx">
+      <DependentUpon>201501081057272_Extra-Project-Details.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501081059541_AddStatus.resx">
+      <DependentUpon>201501081059541_AddStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501081114508_StatusGlyphicon.resx">
+      <DependentUpon>201501081114508_StatusGlyphicon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501081122567_StatusGlyphiconUpdate.resx">
+      <DependentUpon>201501081122567_StatusGlyphiconUpdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501081131416_Add_Task_Todo_Status.resx">
+      <DependentUpon>201501081131416_Add_Task_Todo_Status.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501081141162_Add_Name_Status.resx">
+      <DependentUpon>201501081141162_Add_Name_Status.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

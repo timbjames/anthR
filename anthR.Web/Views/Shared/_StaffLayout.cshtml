@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "_TodoLayout";
+    ViewBag.Title = "_NotesLayout";
 }
 
 
@@ -9,13 +9,15 @@
 }
 
 <div class="jumbotron">
-    <h1>anthR<i>.Todo</i></h1>    
+    <h1>anthR<i>.Staff</i></h1>    
 </div>
 
 @RenderBody()
 
 @section scripts{
    
+    @RenderSection("scripts", required: false)
+
     <script src="~/scripts/moment.js"></script>
     <script src="~/scripts/bootstrap-datetimepicker.js"></script>
     <script>
@@ -23,6 +25,7 @@
             $('.datetimepicker').datetimepicker();
         });
     </script>
+
 
 }
 

@@ -41,6 +41,7 @@ namespace anthR.Web.Controllers
         public ActionResult Create()
         {
             ViewBag.Priority = new SelectList(Enumerable.Range(1, 4), "Priority");
+            ViewBag.Status = new SelectList(_db.Status, "Id", "Description");
             return View(new TodoItemEditModel() { MasterSites = _db.MasterSite.ToList() });
         }
 

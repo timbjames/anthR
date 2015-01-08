@@ -17,6 +17,8 @@ namespace anthR.Web.Models.Todo
         public int Priority { get; set; }
         public int MastersiteId { get; set; }
         public List<MasterSite> MasterSites { get; set; }
+        public int StatusId { get; set; }
+        public List<Status> Status { get; set; }
 
     }
 }

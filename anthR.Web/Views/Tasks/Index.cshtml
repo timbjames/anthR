@@ -1,0 +1,43 @@
+﻿@model IEnumerable<anthR.Web.Models.Task.AnthRTask>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TaskLayout.cshtml";
+}
+
+<p>
+    @Html.ActionLink("Create New", "Create", "Task", null, new { @class = "btn btn-sm btn-primary" })
+</p>
+<table class="table">
+    <caption>Project Task</caption>
+    <tr>
+        <th>
+            Project
+        </th>
+        <th>
+            Task
+        </th>
+        <th>Status</th>
+        <th class="text-right">Options</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Project.MasterSite.Name) - @Html.DisplayFor(modelItem => item.Project.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status.Description)
+        </td>
+        <td class="text-right">
+            @Html.ActionLink("Edit", "Edit", "Task", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
+            @Html.ActionLink("Details", "Details", "Task", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
+            @Html.ActionLink("Delete", "Delete", "Task", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
+        </td>
+    </tr>
+}
+
+</table>

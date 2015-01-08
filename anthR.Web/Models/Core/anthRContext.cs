@@ -18,6 +18,7 @@ namespace anthR.Web.Models.Core
         public DbSet<Task.AnthRTask> AnthRTask { get; set; }
         public DbSet<Core.StaffOnTask> StaffOnTask { get; set; }
         public DbSet<Notes.Note> Note { get; set; }
+        public DbSet<Core.Status> Status { get; set; }
 
         public anthRContext()
             : base("anthRContext")
