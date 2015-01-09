@@ -30,3 +30,17 @@ caption{
     text-align: left;
 }
 
+.jumbotron.skinny{
+    margin-top: 12px;
+    padding: 12px;
+}
+    .jumbotron.skinny h1 {
+        margin-top: 10px;
+    }
+
+@media screen and (min-width: 768px){
+    .jumbotron.skinny{
+        padding: 12px;
+    }
+}
+

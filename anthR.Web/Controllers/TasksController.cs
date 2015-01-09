@@ -17,9 +17,9 @@ namespace anthR.Web.Controllers
         private anthRContext _db = new anthRContext();
 
         // GET: AnthRTasks
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int? id)
         {
-            var anthRTask = _db.AnthRTask.Include(a => a.Project);
+            var anthRTask = _db.AnthRTask.Where(t => !id.HasValue || t.ProjectId.Equals(id.Value)).Include(a => a.Project);
             return View(await anthRTask.ToListAsync());
         }
 
@@ -39,11 +39,17 @@ namespace anthR.Web.Controllers
         }
 
         // GET: AnthRTasks/Create
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
-            ViewBag.ProjectId = new SelectList(_db.Project, "Id", "Name");
+
+            // get specific project if we have an id
+            var projects = _db.Project.Where(p => !id.HasValue || p.Id.Equals(id.Value));
+
+            ViewBag.ProjectId = new SelectList(projects.ToList(), "Id", "Name");
             ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description");
+
             return View();
+
         }
 
         // POST: AnthRTasks/Create
@@ -77,7 +83,10 @@ namespace anthR.Web.Controllers
             {
                 return HttpNotFound();
             }
+            
             ViewBag.ProjectId = new SelectList(_db.Project, "Id", "Name", anthRTask.ProjectId);
+            ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description", anthRTask.StatusId);
+
             return View(anthRTask);
         }
 

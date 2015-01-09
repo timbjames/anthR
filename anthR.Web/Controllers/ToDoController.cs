@@ -52,6 +52,8 @@ namespace anthR.Web.Controllers
 
             if (!ModelState.IsValid)
             {
+                ViewBag.Priority = new SelectList(Enumerable.Range(1, 4), "Priority");
+                ViewBag.Status = new SelectList(_db.Status, "Id", "Description");
                 return View(model);
             }
 

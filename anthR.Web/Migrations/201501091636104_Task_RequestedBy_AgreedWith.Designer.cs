@@ -7,13 +7,13 @@ namespace anthR.Web.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.2-31219")]
-    public sealed partial class Add_Task_Todo_Status : IMigrationMetadata
+    public sealed partial class Task_RequestedBy_AgreedWith : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Add_Task_Todo_Status));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Task_RequestedBy_AgreedWith));
         
         string IMigrationMetadata.Id
         {
-            get { return "201501081131416_Add_Task_Todo_Status"; }
+            get { return "201501091636104_Task_RequestedBy_AgreedWith"; }
         }
         
         string IMigrationMetadata.Source

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<anthR.Web.Models.Core.StaffOnTask>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TodoLayout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AnthRTask.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Staff.Name)
+        </th>
+        <th class="text-right">Options</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AnthRTask.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Staff.Name)
+        </td>
+        <td class="text-right">
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-xs btn-primary", role = "button" })
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-xs btn-primary", role = "button" })
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ }, new { @class = "btn btn-xs btn-primary", role = "button" })
+        </td>
+    </tr>
+}
+
+</table>

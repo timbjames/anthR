@@ -3,18 +3,16 @@ namespace anthR.Web.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class StatusGlyphicon : DbMigration
+    public partial class Timesheet_Quoted : DbMigration
     {
-        
         public override void Up()
         {
-            AddColumn("dbo.Status", "Glyphicon", c => c.String());
+            AddColumn("dbo.Timesheet", "Quoted", c => c.Double(nullable: false));
         }
         
         public override void Down()
         {
-            DropColumn("dbo.Status", "Glyphicon");
+            DropColumn("dbo.Timesheet", "Quoted");
         }
-
     }
 }

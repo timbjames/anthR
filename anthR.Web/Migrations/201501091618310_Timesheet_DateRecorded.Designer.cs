@@ -7,13 +7,13 @@ namespace anthR.Web.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.2-31219")]
-    public sealed partial class ExtraProjectDetails : IMigrationMetadata
+    public sealed partial class Timesheet_DateRecorded : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ExtraProjectDetails));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Timesheet_DateRecorded));
         
         string IMigrationMetadata.Id
         {
-            get { return "201501081057272_Extra-Project-Details"; }
+            get { return "201501091618310_Timesheet_DateRecorded"; }
         }
         
         string IMigrationMetadata.Source

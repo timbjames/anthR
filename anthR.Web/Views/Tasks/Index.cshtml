@@ -2,11 +2,15 @@
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_TaskLayout.cshtml";
+    int? _id = null;
+    // get project id if exists.
+    if (ViewContext.RouteData.Values["id"] != null && !string.IsNullOrEmpty(ViewContext.RouteData.Values["id"].ToString())){
+        _id = int.Parse(ViewContext.RouteData.Values["id"].ToString());
+    }
 }
 
 <p>
-    @Html.ActionLink("Create New", "Create", "Task", null, new { @class = "btn btn-sm btn-primary" })
+    @Html.ActionLink("Create New Task", "Create", "Tasks", new { id = _id }, new { @class = "btn btn-xs btn-primary" })
 </p>
 <table class="table">
     <caption>Project Task</caption>
@@ -18,24 +22,43 @@
             Task
         </th>
         <th>Status</th>
+        <th>Staff On Task</th>
         <th class="text-right">Options</th>
     </tr>
 
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Project.MasterSite.Name) - @Html.DisplayFor(modelItem => item.Project.Name)
+            <i>@Html.DisplayFor(modelItem => item.Project.MasterSite.Name)</i>
+            <br />
+            <strong>@Html.DisplayFor(modelItem => item.Project.Name)</strong>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Description)
         </td>
-        <td>
+        <td style="@string.Format("background-color: {0}", item.Status.HexColor)">
             @Html.DisplayFor(modelItem => item.Status.Description)
         </td>
+        <td>
+            @if (item.StaffOnTasks.Any())
+            {
+                foreach (var staff in item.StaffOnTasks)
+                {
+                    <span>@Html.ActionLink(staff.Staff.Name, "Details", "Staff", new { id = staff.StaffId }, null)</span>
+                }
+            }
+        </td>
+        
         <td class="text-right">
-            @Html.ActionLink("Edit", "Edit", "Task", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
-            @Html.ActionLink("Details", "Details", "Task", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
-            @Html.ActionLink("Delete", "Delete", "Task", new { id = item.Id }, new { @class = "btn btn-sm btn-primary" })
+            <div class="btn btn-xs btn-group">
+                @Html.ActionLink("Add Staff", "Create", "StaffOnTasks", new { id = item.ProjectId, taskId = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                @Html.ActionLink("Allocate Time", "Create", "Timesheets", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })                
+            </div>            
+            <div class="btn btn-xs btn-group">
+                @Html.ActionLink("Edit", "Edit", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                @Html.ActionLink("Details", "Details", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                @Html.ActionLink("Delete", "Delete", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+            </div>
         </td>
     </tr>
 }

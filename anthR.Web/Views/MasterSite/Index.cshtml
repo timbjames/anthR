@@ -9,33 +9,33 @@
 
         <div>
             <p>
-                @Html.ActionLink("Create New Master Site", "Create", "MasterSite", null, new { @class = "btn btn-sm btn-primary" })
+                @Html.ActionLink("Create New Master Site", "Create", "MasterSite", null, new { @class = "btn btn-xs btn-primary" })
             </p>
         </div>
 
         @if (Model.Count == 0)
         {
-            <h4>No Todo Items</h4>
+            <h4>No Master Sites</h4>
         }
         else
         {
             <table class="table">
-                <caption>Todo list items</caption>
+                <caption>Master Sites</caption>
                 <tr>
                     <th>ID</th>
                     <th>Master Site</th>
-                    @*<th class="text-right">Options</th>*@
+                    <th class="text-right">Options</th>
                 </tr>
                 @foreach (var masterSite in Model)
                 {                    
                     <tr>
                         <td>@masterSite.MasterSiteId</td>
                         <td>@masterSite.Name</td>
-                        @*<td class="text-right">
-                        @Html.ActionLink("Details", "Details", "Todo", new { id = todo.Id }, new { @class = "btn btn-xs btn-primary", role = "button" })
-                        @Html.ActionLink("Edit", "Edit", "Todo", new { id = todo.Id }, new { @class = "btn btn-xs btn-primary", role = "button" })
-                        @Html.ActionLink("Delete", "Delete", "Todo", new { id = todo.Id }, new { @class = "btn btn-xs btn-primary", role = "button" })
-                        </td>*@
+                        <td class="text-right">
+                            @Html.ActionLink("Details", "Details", "Todo", new { id = masterSite.MasterSiteId }, new { @class = "btn btn-xs btn-primary", role = "button" })
+                            @Html.ActionLink("Edit", "Edit", "Todo", new { id = masterSite.MasterSiteId }, new { @class = "btn btn-xs btn-primary", role = "button" })
+                            @*@Html.ActionLink("Delete", "Delete", "Todo", new { id = todo.Id }, new { @class = "btn btn-xs btn-primary", role = "button" })*@
+                        </td>
                     </tr>
                 }
             </table>

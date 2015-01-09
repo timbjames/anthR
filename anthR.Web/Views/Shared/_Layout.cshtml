@@ -22,15 +22,14 @@
                 @Html.ActionLink("anthR", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Master Site", "Index", "MasterSite")</li>
+                <ul class="nav navbar-nav">                           
                     <li>@Html.ActionLink("Projects", "Index", "Projects")</li>
-                    <li>@Html.ActionLink("ToDo", "Index", "Todo")</li>
-                    <li>@Html.ActionLink("Staff", "Index", "Staff")</li>
-                    <li>@Html.ActionLink("Timesheet", "Timesheet", "Home")</li>
                     <li>@Html.ActionLink("Tasks", "Index", "Tasks")</li>
+                    @*<li>@Html.ActionLink("Timesheets", "Index", "Timesheets")</li>*@
+                    @*<li>@Html.ActionLink("ToDo", "Index", "Todo")</li>*@                    
                     <li>@Html.ActionLink("Notes", "Index", "Notes")</li>
+                    <li>@Html.ActionLink("Master Site", "Index", "MasterSite")</li>
+                    <li>@Html.ActionLink("Staff", "Index", "Staff")</li>
                 </ul>
             </div>
         </div>

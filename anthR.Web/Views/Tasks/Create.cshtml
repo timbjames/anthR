@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_TodoLayout.cshtml";
 }
 
 <h2>Create</h2>
@@ -36,7 +35,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ProjectId, "ProjectId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.ProjectId, "Project", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("ProjectId", (SelectList)ViewBag.ProjectId, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ProjectId, "", new { @class = "text-danger" })
@@ -44,7 +43,7 @@
         </div>
         
         <div class="form-group">
-            @Html.LabelFor(model => model.StatusId, "StatusId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.StatusId, "Status", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("StatusId", (SelectList)ViewBag.StatusId, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })

@@ -1,0 +1,71 @@
+﻿@model IEnumerable<anthR.Web.Models.Task.Timesheet>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_TimesheetLayout.cshtml";
+}
+
+<p>
+    @Html.ActionLink("Allocate Time to Task", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AnthRTask.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Staff.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateRecorded)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Hours)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Mins)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.HourlyRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Quoted)
+        </th>
+        <th class="text-right">Options</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            <i>@Html.DisplayFor(modelItem => item.AnthRTask.Project.Name)</i>
+            <br />
+            <strong>@Html.DisplayFor(modelItem => item.AnthRTask.Name)</strong>            
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Staff.Name)
+        </td>
+        <td>
+            @(item.DateRecorded.HasValue ? item.DateRecorded.Value.ToString("dd MMM yyyy") : "n/a")
+            @*@Html.DisplayFor(modelItem => item.DateRecorded.HasValue ? item.DateRecorded.Value.ToString("dd MMM yyyy") : "n/a")*@
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Hours)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Mins)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.HourlyRate)
+        </td>
+        <td>
+            &pound;@Html.DisplayFor(modelItem => item.Quoted)
+        </td>
+        <td class="text-right">
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-xs btn-primary", role = "button" })
+            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-xs btn-primary", role = "button" })
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-xs btn-primary", role = "button" })
+        </td>
+    </tr>
+}
+
+</table>

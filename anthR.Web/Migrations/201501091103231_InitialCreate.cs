@@ -13,10 +13,15 @@ namespace anthR.Web.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         ProjectId = c.Int(nullable: false),
+                        Name = c.String(),
+                        Description = c.String(),
+                        StatusId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Project", t => t.ProjectId)
-                .Index(t => t.ProjectId);
+                .ForeignKey("dbo.Status", t => t.StatusId)
+                .Index(t => t.ProjectId)
+                .Index(t => t.StatusId);
             
             CreateTable(
                 "dbo.Project",
@@ -50,10 +55,26 @@ namespace anthR.Web.Migrations
                         Description = c.String(),
                         Deadline = c.DateTime(),
                         MasterSiteId = c.Int(nullable: false),
+                        StatusId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.MasterSite", t => t.MasterSiteId)
-                .Index(t => t.MasterSiteId);
+                .ForeignKey("dbo.Status", t => t.StatusId)
+                .Index(t => t.MasterSiteId)
+                .Index(t => t.StatusId);
+            
+            CreateTable(
+                "dbo.Status",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                        Description = c.String(),
+                        HexColor = c.String(),
+                        Glyphicon = c.String(),
+                        ShowIcon = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.StaffOnProjects",
@@ -108,12 +129,14 @@ namespace anthR.Web.Migrations
         
         public override void Down()
         {
+            DropForeignKey("dbo.AnthRTask", "StatusId", "dbo.Status");
             DropForeignKey("dbo.AnthRTask", "ProjectId", "dbo.Project");
             DropForeignKey("dbo.StaffOnTask", "StaffId", "dbo.Staff");
             DropForeignKey("dbo.StaffOnTask", "AnthRTaskId", "dbo.AnthRTask");
             DropForeignKey("dbo.StaffOnProjects", "StaffId", "dbo.Staff");
             DropForeignKey("dbo.Note", "StaffId", "dbo.Staff");
             DropForeignKey("dbo.StaffOnProjects", "ProjectId", "dbo.Project");
+            DropForeignKey("dbo.TodoItem", "StatusId", "dbo.Status");
             DropForeignKey("dbo.TodoItem", "MasterSiteId", "dbo.MasterSite");
             DropForeignKey("dbo.Project", "MasterSiteId", "dbo.MasterSite");
             DropIndex("dbo.StaffOnTask", new[] { "AnthRTaskId" });
@@ -121,13 +144,16 @@ namespace anthR.Web.Migrations
             DropIndex("dbo.Note", new[] { "StaffId" });
             DropIndex("dbo.StaffOnProjects", new[] { "ProjectId" });
             DropIndex("dbo.StaffOnProjects", new[] { "StaffId" });
+            DropIndex("dbo.TodoItem", new[] { "StatusId" });
             DropIndex("dbo.TodoItem", new[] { "MasterSiteId" });
             DropIndex("dbo.Project", new[] { "MasterSiteId" });
+            DropIndex("dbo.AnthRTask", new[] { "StatusId" });
             DropIndex("dbo.AnthRTask", new[] { "ProjectId" });
             DropTable("dbo.StaffOnTask");
             DropTable("dbo.Note");
             DropTable("dbo.Staff");
             DropTable("dbo.StaffOnProjects");
+            DropTable("dbo.Status");
             DropTable("dbo.TodoItem");
             DropTable("dbo.MasterSite");
             DropTable("dbo.Project");

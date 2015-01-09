@@ -1,0 +1,35 @@
+﻿@model anthR.Web.Models.Core.StaffOnTask
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_TodoLayout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>StaffOnTask</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AnthRTask.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnthRTask.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Staff.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Staff.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

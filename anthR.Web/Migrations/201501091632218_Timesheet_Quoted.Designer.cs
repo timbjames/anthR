@@ -7,13 +7,13 @@ namespace anthR.Web.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.2-31219")]
-    public sealed partial class Add_Name_Status : IMigrationMetadata
+    public sealed partial class Timesheet_Quoted : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Add_Name_Status));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Timesheet_Quoted));
         
         string IMigrationMetadata.Id
         {
-            get { return "201501081141162_Add_Name_Status"; }
+            get { return "201501091632218_Timesheet_Quoted"; }
         }
         
         string IMigrationMetadata.Source

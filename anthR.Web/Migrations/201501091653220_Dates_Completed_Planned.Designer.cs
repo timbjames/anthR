@@ -7,13 +7,13 @@ namespace anthR.Web.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.2-31219")]
-    public sealed partial class StatusGlyphiconUpdate : IMigrationMetadata
+    public sealed partial class Dates_Completed_Planned : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(StatusGlyphiconUpdate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Dates_Completed_Planned));
         
         string IMigrationMetadata.Id
         {
-            get { return "201501081122567_StatusGlyphiconUpdate"; }
+            get { return "201501091653220_Dates_Completed_Planned"; }
         }
         
         string IMigrationMetadata.Source

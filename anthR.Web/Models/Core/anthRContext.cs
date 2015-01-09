@@ -30,9 +30,13 @@ namespace anthR.Web.Models.Core
         {
             
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+            //modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();              
 
         }
+
+        public System.Data.Entity.DbSet<anthR.Web.Models.Core.StaffOnProjects> StaffOnProjects { get; set; }
+
+        public System.Data.Entity.DbSet<anthR.Web.Models.Task.Timesheet> Timesheets { get; set; }
 
     }
 }
