@@ -33,6 +33,27 @@
         </div>
 
         <div class="form-group">
+            @Html.LabelFor(model => model.PlannedStart, new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-3">
+                @Html.EditorFor(model => model.PlannedStart)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.OnGoing, new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-3">
+                @Html.EditorFor(x => x.OnGoing)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Deadline, new { @class = "col-sm-2 control-label" })
+            <div class="col-sm-3">
+                @Html.EditorFor(model => model.Deadline)
+            </div>
+        </div>
+
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>

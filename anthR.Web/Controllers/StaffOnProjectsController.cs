@@ -56,7 +56,9 @@ namespace anthR.Web.Controllers
             {
                 db.StaffOnProjects.Add(staffOnProjects);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+                // redirect to project index
+                return RedirectToAction("Index", "Projects");
             }
 
             ViewBag.ProjectId = new SelectList(db.Project, "Id", "Name", staffOnProjects.ProjectId);

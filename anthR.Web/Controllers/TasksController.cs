@@ -14,12 +14,17 @@ namespace anthR.Web.Controllers
 {
     public class TasksController : Controller
     {
+
+        //private int _completedStatusId = 4;
         private anthRContext _db = new anthRContext();
 
         // GET: AnthRTasks
         public async Task<ActionResult> Index(int? id)
         {
-            var anthRTask = _db.AnthRTask.Where(t => !id.HasValue || t.ProjectId.Equals(id.Value)).Include(a => a.Project);
+            var anthRTask = _db.AnthRTask.Where(t => !id.HasValue && !t.DateCompleted.HasValue || t.ProjectId.Equals(id.Value) && !t.DateCompleted.HasValue)                
+                .OrderByDescending(p => p.PlannedStart)
+                .ThenByDescending(p => p.Deadline)
+                .Include(a => a.Project);
             return View(await anthRTask.ToListAsync());
         }
 
@@ -57,7 +62,7 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,ProjectId,StatusId,Name,Description")] AnthRTask anthRTask)
+        public async Task<ActionResult> Create([Bind(Include = "Id,ProjectId,StatusId,Name,Description,RequestedBy,PlannedStart,Deadline")] AnthRTask anthRTask)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +100,7 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,ProjectId,StatusId,Name,Description")] AnthRTask anthRTask)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,ProjectId,StatusId,Name,Description,RequestedBy,PlannedStart,Deadline")] AnthRTask anthRTask)
         {
             if (ModelState.IsValid)
             {
@@ -134,6 +139,43 @@ namespace anthR.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<ActionResult> CompleteTask(int id)
+        {
+            
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AnthRTask anthRTask = await _db.AnthRTask.FindAsync(id);
+            if (anthRTask == null)
+            {
+                return HttpNotFound();
+            }
+            
+            ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description", anthRTask.StatusId);
+            return View(anthRTask);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CompleteTask([Bind(Include = "Id,StatusId,DateCompleted")] AnthRTask anthRTask)
+        {
+            if (ModelState.IsValid)
+            {
+                var task = _db.AnthRTask.SingleOrDefault(t => t.Id.Equals(anthRTask.Id));
+                
+                task.DateCompleted = anthRTask.DateCompleted;
+                task.StatusId = anthRTask.StatusId;
+                
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description", anthRTask.StatusId);
+            return View(anthRTask);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -142,5 +184,6 @@ namespace anthR.Web.Controllers
             }
             base.Dispose(disposing);
         }
+
     }
 }

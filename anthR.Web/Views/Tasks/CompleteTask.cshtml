@@ -1,26 +1,22 @@
 ﻿@model anthR.Web.Models.Task.AnthRTask
 
-@{
-    ViewBag.Title = "Edit";
-}
-
-<h2>Edit</h2>
-
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
+
         <h4>AnthRTask</h4>
+
         <hr />
+
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.Id)
-
 
         <div class="form-group">
             @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name)
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -28,43 +24,21 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Description)
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(x => x.PlannedStart, new { @class = "col-sm-2 control-label" })
-            <div class="col-sm-3">
-                @Html.EditorFor(x => x.PlannedStart)
+            @Html.LabelFor(model => model.DateCompleted, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-3">
+                @Html.EditorFor(model => model.DateCompleted, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.DateCompleted, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(x => x.Deadline, new { @class = "col-sm-2 control-label" })
-            <div class="col-sm-3">
-                @Html.EditorFor(x => x.Deadline)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.RequestedBy, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.RequestedBy)
-                @Html.ValidationMessageFor(model => model.RequestedBy, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ProjectId, "Project", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("ProjectId", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ProjectId, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.StatusId, "Status", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.StatusId, "StatusId", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("StatusId", null, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
@@ -76,6 +50,7 @@
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </div>
+
     </div>
 }
 

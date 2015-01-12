@@ -168,6 +168,26 @@
     <Compile Include="Migrations\201501091653220_Dates_Completed_Planned.Designer.cs">
       <DependentUpon>201501091653220_Dates_Completed_Planned.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201501120938594_nullable-datecompleted.cs" />
+    <Compile Include="Migrations\201501120938594_nullable-datecompleted.Designer.cs">
+      <DependentUpon>201501120938594_nullable-datecompleted.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501120940178_nullable-datecompleted-2.cs" />
+    <Compile Include="Migrations\201501120940178_nullable-datecompleted-2.Designer.cs">
+      <DependentUpon>201501120940178_nullable-datecompleted-2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501121014423_project_ongoing.cs" />
+    <Compile Include="Migrations\201501121014423_project_ongoing.Designer.cs">
+      <DependentUpon>201501121014423_project_ongoing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501121016432_project_nullable_datecompleted.cs" />
+    <Compile Include="Migrations\201501121016432_project_nullable_datecompleted.Designer.cs">
+      <DependentUpon>201501121016432_project_nullable_datecompleted.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201501121019513_project_nullable_deadline.cs" />
+    <Compile Include="Migrations\201501121019513_project_nullable_deadline.Designer.cs">
+      <DependentUpon>201501121019513_project_nullable_deadline.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Core\anthRContext.cs" />
     <Compile Include="Models\Core\MasterSite.cs" />
@@ -294,6 +314,7 @@
     <Content Include="Views\Timesheets\Details.cshtml" />
     <Content Include="Views\Timesheets\Edit.cshtml" />
     <Content Include="Views\Timesheets\Index.cshtml" />
+    <Content Include="Views\Tasks\CompleteTask.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -326,6 +347,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201501091653220_Dates_Completed_Planned.resx">
       <DependentUpon>201501091653220_Dates_Completed_Planned.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501120938594_nullable-datecompleted.resx">
+      <DependentUpon>201501120938594_nullable-datecompleted.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501120940178_nullable-datecompleted-2.resx">
+      <DependentUpon>201501120940178_nullable-datecompleted-2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501121014423_project_ongoing.resx">
+      <DependentUpon>201501121014423_project_ongoing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501121016432_project_nullable_datecompleted.resx">
+      <DependentUpon>201501121016432_project_nullable_datecompleted.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201501121019513_project_nullable_deadline.resx">
+      <DependentUpon>201501121019513_project_nullable_deadline.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

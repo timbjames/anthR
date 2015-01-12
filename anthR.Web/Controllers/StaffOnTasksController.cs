@@ -62,7 +62,9 @@ namespace anthR.Web.Controllers
             {
                 db.StaffOnTask.Add(staffOnTask);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+                //redirect to task index
+                return RedirectToAction("Index", "Tasks", new { id = id });
             }
 
             var staff = db.Staff.Where(s => s.StaffOnProjects.Where(p => p.ProjectId.Equals(id)).Any());

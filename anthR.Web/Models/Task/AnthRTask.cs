@@ -20,7 +20,7 @@ namespace anthR.Web.Models.Task
         [Display(Name = "Planned Start")]
         public DateTime PlannedStart { get; set; }
         [Display(Name = "Date Completed")]
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateCompleted { get; set; }
 
         [Display(Name = "Requested By")]
         public string RequestedBy { get; set; }

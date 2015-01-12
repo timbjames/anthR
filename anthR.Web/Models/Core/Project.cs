@@ -15,11 +15,12 @@ namespace anthR.Web.Models.Core
         public string Name { get; set; }
 
         public bool Completed { get; set; }
-        public DateTime Deadline { get; set; }
+        public DateTime? Deadline { get; set; }
         [Display(Name = "Planned Start")]
         public DateTime PlannedStart { get; set; }
         [Display(Name = "Date Completed")]
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateCompleted { get; set; }
+        public bool OnGoing { get; set; }
 
         public virtual ICollection<StaffOnProjects> StaffOnProjects { get; set; }
         public int MasterSiteId { get; set; }

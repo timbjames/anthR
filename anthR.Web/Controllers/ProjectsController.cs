@@ -49,7 +49,7 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,MasterSiteId")] Project project)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,MasterSiteId,PlannedStart,Deadline,OnGoing")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +83,7 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,MasterSiteId")] Project project)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,MasterSiteId,PlannedStart,Deadline,OnGoing")] Project project)
         {
             if (ModelState.IsValid)
             {
