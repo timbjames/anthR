@@ -23,6 +23,10 @@ textarea {
     max-width: 280px;
 }
 
+input.form-control-long, textarea.form-control-long, select.form-control-long{
+    max-width: 580px;
+}
+
 caption{
     padding-top: 8px;
     padding-bottom: 8px;
@@ -38,9 +42,30 @@ caption{
         margin-top: 10px;
     }
 
+    .jumbotron.mini{
+    margin-top: 4px;
+    padding: 4px;
+}
+    .jumbotron.mini h1 {
+        margin-top: 2px;
+    }
+
 @media screen and (min-width: 768px){
     .jumbotron.skinny{
         padding: 12px;
     }
+}
+
+.priority-1{
+    background-color: #fb4f4f;
+}
+.priority-2{
+    background-color: #fb8e4f;
+}
+.priority-3{
+    background-color: #fbd84f;
+}
+.priority-4{
+    background-color: #d4fb4f;
 }
 

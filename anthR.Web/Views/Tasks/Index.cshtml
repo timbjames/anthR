@@ -4,17 +4,64 @@
     ViewBag.Title = "Index";
     int? _id = null;
     // get project id if exists.
-    if (ViewContext.RouteData.Values["id"] != null && !string.IsNullOrEmpty(ViewContext.RouteData.Values["id"].ToString())){
+    if (ViewContext.RouteData.Values["id"] != null && !string.IsNullOrEmpty(ViewContext.RouteData.Values["id"].ToString()))
+    {
         _id = int.Parse(ViewContext.RouteData.Values["id"].ToString());
     }
 }
 
 <p>
     @Html.ActionLink("Create New Task", "Create", "Tasks", new { id = _id }, new { @class = "btn btn-xs btn-primary" })
+    |
+    @if (string.IsNullOrEmpty(Request["completed"]))
+    {
+        @Html.ActionLink("Completed Tasks", "Index", "Tasks", new { completed = true }, new { @class = "btn btn-xs btn-primary" })
+    }
+    else
+    {
+        @Html.ActionLink("Live Tasks", "Index", "Tasks", null, new { @class = "btn btn-xs btn-primary" })
+    }
 </p>
-<table class="table">
+
+<div class="col-sm-5 pull-right">
+
+    <form class="form-group form-group-sm form-inline">
+        <fieldset>
+            <div class="col-sm-6">
+                <label>
+                    Status
+                    <select class="form-control" id="status">
+                        <option value="0">All</option>
+                        <option value="1">Awaiting Start</option>
+                        <option value="2">In-Progress</option>                        
+                        <option value="3">Waiting</option>
+                        <option value="4">Complete</option>
+                        <option value="5">Delegated</option>
+                    </select>
+                </label>
+            </div>
+            <div class="col-sm-6">
+                <label>
+                    Priority
+                    <select class="form-control" id="priority">
+                        <option value="0">All</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>                        
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </label>
+            </div>
+        </fieldset>
+    </form>
+
+</div>
+
+<table class="table table-hover" id="project-tasks">
     <caption>Project Task</caption>
     <tr>
+        <th style="width: 2px; padding: 0;">&nbsp;</th>
         <th style="width: 2px; padding: 0;">&nbsp;</th>
         <th>
             Task
@@ -25,51 +72,95 @@
         <th class="text-right">Options</th>
     </tr>
 
-@foreach (var item in Model)
-{
-    <tr>
-        <td style="width: 2px; padding: 0; @string.Format("background-color: {0}", item.Status.HexColor)">&nbsp;</td>
-        <td>
-            <i>
-                @Html.DisplayFor(modelItem => item.Project.MasterSite.Name)<br />
-                <strong>@Html.DisplayFor(modelItem => item.Project.Name)</strong>
-            </i>
-            <br />
-            <strong>@Html.DisplayFor(modelItem => item.Description)</strong>
-        </td>
-        <td>
-            @(item.PlannedStart.Year > 1900 ? item.PlannedStart.ToString("dd MMM h:mm") : "n/a")
-        </td>
-        <td>
-            @(item.Deadline.Year > 1900 ? item.Deadline.ToString("dd MMM h:mm") : "n/a")
-        </td>
-        <td>
-            @if (item.StaffOnTasks.Any())
-            {
-                foreach (var staff in item.StaffOnTasks)
-                {
-                    <span>@Html.ActionLink(staff.Staff.Name, "Details", "Staff", new { id = staff.StaffId }, null)</span>
-                }
-            }
-        </td>
+    @foreach (var item in Model)
+    {
 
-        <td class="text-right">
-            <div class="row">
-                <div class="btn btn-xs btn-group">
-                    @Html.ActionLink("Add Staff", "Create", "StaffOnTasks", new { id = item.ProjectId, taskId = item.Id }, new { @class = "btn btn-xs btn-primary" })
-                    @Html.ActionLink("Allocate Time", "Create", "Timesheets", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-                    @Html.ActionLink("Complete", "CompleteTask", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+        <tr class="@string.Format("ps p-{0} s-{1}", item.Priority, item.StatusId)">
+            <td style="width: 2px; padding: 0; @string.Format("background-color: {0}", item.Status.HexColor)" title="@item.Status.Description">&nbsp;</td>
+            <td class="@string.Format("priority-{0}", item.Priority)" title="@string.Format("Priority {0}", item.Priority)" style="width: 2px; padding: 0;">&nbsp;</td>
+            <td title="@string.Format("Status: {0} - Priority: {1}", item.Status.Description, item.Priority)">
+                <i>
+                    @Html.DisplayFor(modelItem => item.Project.MasterSite.Name)<br />
+                    <strong>@Html.DisplayFor(modelItem => item.Project.Name)</strong>
+                </i>
+                <br />
+                <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
+            </td>
+            <td>
+                @(item.PlannedStart.Year > 1900 ? item.PlannedStart.ToString("dd MMM h:mm") : "n/a")
+            </td>
+            <td>
+                @(item.Deadline.Year > 1900 ? item.Deadline.ToString("dd MMM h:mm") : "n/a")
+            </td>
+            <td>
+                @if (item.StaffOnTasks.Any())
+                {
+                    foreach (var staff in item.StaffOnTasks)
+                    {
+                        <span>@Html.ActionLink(staff.Staff.Name, "Details", "Staff", new { id = staff.StaffId }, null)</span>
+                    }
+                }
+            </td>
+
+            <td class="text-right" style="width: 240px;">
+                <div class="row">
+                    <div class="col-sm-12 text-right">
+                        <div class="btn btn-xs btn-group">
+                            @Html.ActionLink("Add Staff", "Create", "StaffOnTasks", new { id = item.ProjectId, taskId = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                            @Html.ActionLink("Allocate Time", "Create", "Timesheets", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                            @Html.ActionLink("Complete", "CompleteTask", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="btn btn-xs btn-group">
-                    @Html.ActionLink("Edit", "Edit", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-                    @Html.ActionLink("Details", "Details", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-                    @Html.ActionLink("Delete", "Delete", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                <div class="row">
+                    <div class="col-sm-12 text-right">
+                        <div class="btn btn-xs btn-group">
+                            @Html.ActionLink("Edit", "Edit", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                            @Html.ActionLink("Details", "Details", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                            @Html.ActionLink("Delete", "Delete", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                        </div>
+                    </div>
                 </div>
-            </div>            
-        </td>
-    </tr>
-}
+            </td>
+        </tr>
+    }
 
 </table>
+
+@section scripts{
+
+    <script>
+        $(function () {
+
+            var $ddlStatus = $('#status');
+            var $ddlPriority = $('#priority');
+            var $tasks = $('#project-tasks');
+
+            $(document).on('change', '#status, #priority', function () { filterList(); });
+                        
+            var filterList = function () {
+
+                var status = $ddlStatus.val();
+                var priority = $ddlPriority.val();
+
+                $('.ps').hide();
+
+                if (priority == "0" && status == "0") {
+                    $('.ps').show();
+                }
+                else if (priority != "0" && status == "0") {
+                    $('.p-' + priority).show();
+                }
+                else if (priority == "0" && status != "0") {
+                    $('.s-' + status).show();
+                }
+                else {
+                    $('.p-' + priority + '.s-' + status).show();
+                }
+
+            };
+
+        });
+    </script>
+
+}

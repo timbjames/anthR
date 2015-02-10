@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace anthR.Web.Models.Task
 {
+    
     public class Timesheet
     {
 
@@ -21,6 +22,8 @@ namespace anthR.Web.Models.Task
         public DateTime? DateRecorded { get; set; }
 
         public double Quoted { get; set; }
+
+        public bool AlreadyBilled { get; set; }
         
         public int StaffId { get; set; }
         public virtual Core.Staff Staff { get; set; }
@@ -29,4 +32,5 @@ namespace anthR.Web.Models.Task
         public virtual AnthRTask AnthRTask { get; set; }
 
     }
+
 }

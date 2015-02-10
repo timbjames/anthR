@@ -6,6 +6,7 @@
 
 @section head{
     <link href="~/content/styles/bootstrap-datetimepicker.css" rel="stylesheet" />
+    @RenderSection("head", required: false)
 }
 
 <div class="jumbotron skinny">
@@ -23,7 +24,7 @@
             $('.datetimepicker').datetimepicker();
         });
     </script>
-
+    @RenderSection("scripts", required: false)
 }
 
 

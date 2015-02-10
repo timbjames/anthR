@@ -1,0 +1,102 @@
+﻿@model IEnumerable<anthR.Web.Models.Core.MasterSite>
+    
+@{
+    if (!string.IsNullOrEmpty(Request["email"]))
+    {
+        Layout = null;
+    }
+    int totalHours = 0;
+    int totalIncome = 0;
+    double totalQuoted = 0;
+    double total = 0;
+
+    int month = int.Parse(Request["month"].ToString());    
+    int daysInMonth = DateTime.DaysInMonth(DateTime.UtcNow.Year, month);
+    DateTime startDate = new DateTime(DateTime.Now.Year, month, 1);
+    DateTime endDate = new DateTime(DateTime.Now.Year, month, daysInMonth);
+    
+}
+
+@if (string.IsNullOrEmpty(Request["email"]))
+{
+    <p>
+        @Html.ActionLink("Send Email", "EmailTimesheet", new { controller = "Timesheets", month = 1, email = "yes" }, new { @class = "btn btn-sm btn-primary", target = "_blank" })
+    </p>
+}
+
+<ul style="margin-left: 0; padding-left: 0; list-style: none;">
+
+    @foreach (var item in Model)
+    {
+
+        totalHours = 0;
+        totalIncome = 0;
+        totalQuoted = 0;
+
+        <li style="margin-top: 10px; border-top: solid 1px #999;">
+            <h4>@item.Name</h4>
+            <ul>
+                @if (item.Projects.Any())
+                {
+                    foreach (var project in item.Projects.Where(p => p.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()))
+                    {
+                        <li style="border: none;">
+                            @project.Name
+                            <ul>
+                                @if (project.Tasks.Any())
+                                {
+                                    foreach (var task in project.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()))
+                                    {
+                                        <li style="border: none;">
+                                            @task.Name <strong style="color: @(task.DateCompleted.HasValue ? "green": "red")">Status: @(task.DateCompleted.HasValue ? "Completed" : "Awaiting Completion")</strong>
+                                            <ul>
+                                                @if (task.Timesheet.Any())
+                                                {
+                                                    foreach (var timesheet in task.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate))
+                                                    {
+                                                        <li>
+                                                            @if (timesheet.Quoted.Equals(0))
+                                                            {
+                                                                <span title="@timesheet.Id">@timesheet.Hours hours @@ @timesheet.HourlyRate.ToString("C")</span>
+                                                                totalHours += timesheet.Hours;
+                                                                totalIncome += (timesheet.Hours * timesheet.HourlyRate);
+                                                            }
+                                                            else
+                                                            {
+                                                                <span>Quoted @timesheet.Quoted.ToString("C") + VAT <strong>@(timesheet.AlreadyBilled ? "Already Billed" : "Not Billed")</strong></span>
+                                                                totalQuoted += timesheet.Quoted;
+                                                            }
+                                                            @*<a href="/Timesheets/Delete/@timesheet.Id" class="btn btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>*@
+                                                        </li>
+                                                    }
+                                                }
+                                            </ul>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </li>
+                    }
+                }
+            </ul>
+            <br />
+            <i>
+                <strong>Total Hours: @totalHours</strong> /
+                <strong>Total Hourly Income: @totalIncome.ToString("C")</strong> /
+                <strong>Total Quoted: @totalQuoted.ToString("C")</strong> /
+                <strong>Total Income: @((totalQuoted + Convert.ToDouble(totalIncome)).ToString("C"))</strong>
+            </i>
+
+        </li>
+
+        total += totalQuoted + Convert.ToDouble(totalIncome);
+        
+    }
+
+</ul>
+
+<h4 style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #999;" class="text-right">
+    Overall Total: @total.ToString("C")
+</h4>
+
+

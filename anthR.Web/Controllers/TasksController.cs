@@ -19,13 +19,30 @@ namespace anthR.Web.Controllers
         private anthRContext _db = new anthRContext();
 
         // GET: AnthRTasks
-        public async Task<ActionResult> Index(int? id)
+        public async Task<ActionResult> Index(int? id, bool? completed)
         {
-            var anthRTask = _db.AnthRTask.Where(t => !id.HasValue && !t.DateCompleted.HasValue || t.ProjectId.Equals(id.Value) && !t.DateCompleted.HasValue)                
-                .OrderByDescending(p => p.PlannedStart)
-                .ThenByDescending(p => p.Deadline)
+            
+            IQueryable<AnthRTask> anthRTask = null;
+
+            if (!completed.HasValue)
+            {
+                anthRTask = _db.AnthRTask.Where(t => !id.HasValue && !t.DateCompleted.HasValue || t.ProjectId.Equals(id.Value) && !t.DateCompleted.HasValue)                
+                .OrderBy(p => p.Priority)
+                .ThenBy(p => p.Deadline)                
+                .ThenBy(p => p.PlannedStart)                
                 .Include(a => a.Project);
+            }
+            else
+            {
+                anthRTask = _db.AnthRTask.Where(t => !id.HasValue && t.DateCompleted.HasValue || t.ProjectId.Equals(id.Value) && t.DateCompleted.HasValue)                
+                .OrderBy(p => p.Priority)
+                .ThenBy(p => p.Deadline)                
+                .ThenBy(p => p.PlannedStart)                
+                .Include(a => a.Project);
+            }
+
             return View(await anthRTask.ToListAsync());
+
         }
 
         // GET: AnthRTasks/Details/5
@@ -52,6 +69,7 @@ namespace anthR.Web.Controllers
 
             ViewBag.ProjectId = new SelectList(projects.ToList(), "Id", "Name");
             ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description");
+            ViewBag.Priority = new SelectList(Enumerable.Range(1, 4), "Priority");
 
             return View();
 
@@ -62,17 +80,22 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,ProjectId,StatusId,Name,Description,RequestedBy,PlannedStart,Deadline")] AnthRTask anthRTask)
+        public async Task<ActionResult> Create([Bind(Include = "Id,ProjectId,StatusId,Name,Description,RequestedBy,PlannedStart,Deadline,Priority")] AnthRTask anthRTask)
         {
             if (ModelState.IsValid)
             {
                 _db.AnthRTask.Add(anthRTask);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+
+                // redirect to allocate staff to the task
+                return RedirectToAction("Create", "StaffOnTasks", new { id = anthRTask.ProjectId, taskId = anthRTask.Id });
+                
             }
 
             ViewBag.ProjectId = new SelectList(_db.Project, "Id", "Name", anthRTask.ProjectId);
             ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description", anthRTask.StatusId);
+            ViewBag.Priority = new SelectList(Enumerable.Range(1, 4), "Priority");
             return View(anthRTask);
         }
 
@@ -91,6 +114,7 @@ namespace anthR.Web.Controllers
             
             ViewBag.ProjectId = new SelectList(_db.Project, "Id", "Name", anthRTask.ProjectId);
             ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description", anthRTask.StatusId);
+            ViewBag.Priority = new SelectList(Enumerable.Range(1, 4), anthRTask.Priority);
 
             return View(anthRTask);
         }
@@ -100,7 +124,7 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,ProjectId,StatusId,Name,Description,RequestedBy,PlannedStart,Deadline")] AnthRTask anthRTask)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,ProjectId,StatusId,Name,Description,RequestedBy,PlannedStart,Deadline,Priority")] AnthRTask anthRTask)
         {
             if (ModelState.IsValid)
             {
@@ -110,6 +134,7 @@ namespace anthR.Web.Controllers
             }
             ViewBag.ProjectId = new SelectList(_db.Project, "Id", "Name", anthRTask.ProjectId);
             ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description", anthRTask.StatusId);
+            ViewBag.Priority = new SelectList(Enumerable.Range(1, 4), "Priority");
             return View(anthRTask);
         }
 

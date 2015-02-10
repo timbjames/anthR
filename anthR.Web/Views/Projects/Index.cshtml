@@ -6,6 +6,20 @@
 
 <p>
     @Html.ActionLink("Create New Project", "Create", "Projects", null, new { @class = "btn btn-xs btn-primary" })
+    |
+    @if (string.IsNullOrEmpty(Request["completed"]))
+    {
+        @Html.ActionLink("Completed Projects", "Index", "Projects", new { completed = true }, new { @class = "btn btn-xs btn-primary" })
+    }
+    else
+    {
+        @Html.ActionLink("Live Projects", "Index", "Projects", null, new { @class = "btn btn-xs btn-primary" })
+    }    
+    <div class="checkbox pull-right">
+        <label>
+            <input type="checkbox" id="with-tasks" /> With Current Tasks
+        </label>
+    </div>    
 </p>
 <table class="table">
     <tr>
@@ -18,35 +32,65 @@
         <th>
             Staff On Project
         </th>
+        <th>Current Tasks</th>
         <th class="text-right">Options</th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.MasterSite.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @if (item.StaffOnProjects.Any())
-            {
-                foreach (var staff in item.StaffOnProjects)
+    @foreach (var item in Model)
+    {        
+        <tr class="@string.Format("task-count-{0}", @item.Tasks.Where(t => !t.DateCompleted.HasValue).Count())">
+            <td>
+                @Html.DisplayFor(modelItem => item.MasterSite.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @if (item.StaffOnProjects.Any())
                 {
-                    <span>@Html.ActionLink(staff.Staff.Name, "Details", "Staff", new { id = staff.StaffId }, null)</span>
+                    foreach (var staff in item.StaffOnProjects)
+                    {
+                        <span>@Html.ActionLink(staff.Staff.Name, "Details", "Staff", new { id = staff.StaffId }, null)</span>
+                    }
                 }
-            }
-        </td>
-
-        <td class="text-right">
-            @Html.ActionLink("Add Staff", "Create", "StaffOnProjects", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-            @Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-            @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-        </td>
-    </tr>
-}
+            </td>
+            <td>
+                @item.Tasks.Where(t => !t.DateCompleted.HasValue).Count()
+            </td>
+            <td class="text-right">
+                <div class="row">
+                    <div class="btn btn-xs btn-group">
+                        @Html.ActionLink("Add Staff", "Create", "StaffOnProjects", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                        @Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                        @Html.ActionLink("Complete", "Complete", "Projects", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="btn btn-xs btn-group">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+    }
 
 </table>
+
+
+@section scripts{
+
+    <script>
+        $(function () {
+            $('#with-tasks').on('click', function () {
+                if ($(this).is(':checked')) {
+                    $('.task-count-0').hide();
+                } else {
+                    $('.task-count-0').show();
+                }
+            });
+        });
+    </script>
+
+}

@@ -16,10 +16,22 @@ namespace anthR.Web.Controllers
         private anthRContext db = new anthRContext();
 
         // GET: Projects
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(bool? completed)
         {
-            var project = db.Project.Include(p => p.MasterSite);
+            
+            IQueryable<Project> project = null;
+
+            if (!completed.HasValue)
+            {
+                project = db.Project.Where(p => !p.Completed).Include(p => p.MasterSite).OrderBy(p => p.MasterSite.Name).ThenBy(p => p.Name);
+            }
+            else
+            {
+                project = db.Project.Where(p => p.Completed).Include(p => p.MasterSite).OrderBy(p => p.MasterSite.Name).ThenBy(p => p.Name);
+            }
+
             return View(await project.ToListAsync());
+
         }
 
         // GET: Projects/Details/5
@@ -53,9 +65,14 @@ namespace anthR.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                
                 db.Project.Add(project);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                //return RedirectToAction("Index");
+
+                //redirect to allocate staff to the project
+                return RedirectToAction("Create", "StaffOnProjects", new { id = project.Id });
+
             }
 
             ViewBag.MasterSiteId = new SelectList(db.MasterSite, "MasterSiteId", "Name", project.MasterSiteId);
@@ -93,6 +110,39 @@ namespace anthR.Web.Controllers
             }
             ViewBag.MasterSiteId = new SelectList(db.MasterSite, "MasterSiteId", "Name", project.MasterSiteId);
             return View(project);
+        }
+
+        public async Task<ActionResult> Complete(int? id)
+        {
+            
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Project project = await db.Project.FindAsync(id);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+
+            project.DateCompleted = DateTime.Now;
+
+            return View(project);
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Complete([Bind(Include = "Id,DateCompleted")] Project model)
+        {
+            
+            Project project = await db.Project.FindAsync(model.Id);
+            project.DateCompleted = model.DateCompleted;
+            project.Completed = true;
+            await db.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+
         }
 
         // GET: Projects/Delete/5

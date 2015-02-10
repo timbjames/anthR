@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using anthR.Web.Models.Core;
 using anthR.Web.Models.Task;
+using System.Net.Mail;
 
 namespace anthR.Web.Controllers
 {
@@ -59,7 +60,7 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Hours,Mins,HourlyRate,StaffId,AnthRTaskId,DateRecorded")] Timesheet timesheet)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Hours,Mins,HourlyRate,StaffId,AnthRTaskId,DateRecorded,Quoted,AlreadyBilled")] Timesheet timesheet)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +96,7 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Hours,Mins,HourlyRate,StaffId,AnthRTaskId,DateRecorded")] Timesheet timesheet)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Hours,Mins,HourlyRate,StaffId,AnthRTaskId,DateRecorded,Quoted,AlreadyBilled")] Timesheet timesheet)
         {
             if (ModelState.IsValid)
             {
@@ -132,6 +133,79 @@ namespace anthR.Web.Controllers
             db.Timesheets.Remove(timesheet);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Show(int? id, int? month)
+        {
+
+            // show the timesheet based on either the month, day or year
+            IQueryable<MasterSite> masterSites = null;
+
+            if (!month.HasValue)
+            {
+                month = 1;
+            }
+            
+            int daysInMonth = DateTime.DaysInMonth(DateTime.UtcNow.Year, month.Value);
+            DateTime startDate = new DateTime(DateTime.Now.Year, month.Value, 1);
+            DateTime endDate = new DateTime(DateTime.Now.Year, month.Value, daysInMonth);
+            masterSites = db.MasterSite
+                .Where(ms => ms.Projects
+                    .Where(p => p.Tasks
+                        .Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()).Any());
+                             
+            return View(await masterSites.ToListAsync());            
+
+        }
+
+        public async Task<ActionResult> EmailTimesheet(int? id, int? month)
+        {
+
+            // show the timesheet based on either the month, day or year
+            IQueryable<MasterSite> masterSites = null;
+
+            if (!month.HasValue)
+            {
+                month = 1;
+            }
+            
+            int daysInMonth = DateTime.DaysInMonth(DateTime.UtcNow.Year, month.Value);
+            DateTime startDate = new DateTime(DateTime.Now.Year, month.Value, 1);
+            DateTime endDate = new DateTime(DateTime.Now.Year, month.Value, daysInMonth);
+            masterSites = db.MasterSite
+                .Where(ms => ms.Projects
+                    .Where(p => p.Tasks
+                        .Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()).Any());
+
+            // need to load up the html from the Show action and email it out
+            var body = anthR.Utils.IO.Razor.RenderViewToString(this, "Show", masterSites.ToList());
+
+            MailMessage email = null;
+            SmtpClient smtpClient = null;
+            try
+            {
+                email = new MailMessage();
+                email.To.Add("tim@kingfisher-systems.co.uk");
+                email.From = new MailAddress("tim@kingfisher-systems.co.uk");
+                email.IsBodyHtml = true;
+                email.Body = body;
+                email.Subject = string.Format("{0} Timesheet", startDate.ToString("MMM yyyy"));
+
+                smtpClient = new SmtpClient();
+                smtpClient.Send(email);
+
+            }
+            catch (SmtpException smtpEx)
+            {
+                throw smtpEx;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return Content(body);
+
         }
 
         protected override void Dispose(bool disposing)

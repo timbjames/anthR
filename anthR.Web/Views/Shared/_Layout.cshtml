@@ -25,11 +25,13 @@
                 <ul class="nav navbar-nav">                           
                     <li>@Html.ActionLink("Projects", "Index", "Projects")</li>
                     <li>@Html.ActionLink("Tasks", "Index", "Tasks")</li>
+                    <li>@Html.ActionLink("Schedule", "Index", "Schedule")</li>
                     @*<li>@Html.ActionLink("Timesheets", "Index", "Timesheets")</li>*@
                     @*<li>@Html.ActionLink("ToDo", "Index", "Todo")</li>*@                    
                     <li>@Html.ActionLink("Notes", "Index", "Notes")</li>
                     <li>@Html.ActionLink("Master Site", "Index", "MasterSite")</li>
                     <li>@Html.ActionLink("Staff", "Index", "Staff")</li>
+                    <li>@Html.ActionLink("Monthy Timesheet", "Show", new { controller = "Timesheets", month = DateTime.Now.Month})</li>
                 </ul>
             </div>
         </div>

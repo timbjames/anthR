@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Task Admin";
+}
+
+
+@section head{
+    <link href="~/content/styles/bootstrap-datetimepicker.css" rel="stylesheet" />
+    @RenderSection("head", required: false)
+}
+
+@*<div class="jumbotron mini">
+    <h1>anthR<i>.Schedule</i></h1>    
+</div>*@
+
+<p>&nbsp;</p>
+
+@RenderBody()
+
+@section scripts{
+   
+    <script src="~/scripts/moment.js"></script>
+    <script src="~/scripts/bootstrap-datetimepicker.js"></script>
+    <script>
+        $(function () {
+            $('.datetimepicker').datetimepicker();
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+}
+
+

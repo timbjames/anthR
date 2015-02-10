@@ -14,6 +14,7 @@ namespace anthR.Web.Models.Task
         public int Id { get; set; }       
         [Display(Name = "Task")]
         public string Name { get; set; }
+        [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
         public DateTime Deadline { get; set; }
@@ -34,6 +35,10 @@ namespace anthR.Web.Models.Task
 
         public int StatusId { get; set; }
         public virtual Status Status { get; set; }
+
+        public int Priority { get; set; }
+
+        public virtual ICollection<Timesheet> Timesheet { get; set; }
 
     }
 }
