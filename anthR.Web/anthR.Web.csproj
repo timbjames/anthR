@@ -17,8 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -206,6 +206,22 @@
     <Compile Include="Migrations\201501201542411_Timesheet_AlreadyBilled.Designer.cs">
       <DependentUpon>201501201542411_Timesheet_AlreadyBilled.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201502171034141_Note_Username.cs" />
+    <Compile Include="Migrations\201502171034141_Note_Username.Designer.cs">
+      <DependentUpon>201502171034141_Note_Username.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502171045336_Staff_Username.cs" />
+    <Compile Include="Migrations\201502171045336_Staff_Username.Designer.cs">
+      <DependentUpon>201502171045336_Staff_Username.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502171108216_Project_Username.cs" />
+    <Compile Include="Migrations\201502171108216_Project_Username.Designer.cs">
+      <DependentUpon>201502171108216_Project_Username.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201502171124363_Task_Username.cs" />
+    <Compile Include="Migrations\201502171124363_Task_Username.Designer.cs">
+      <DependentUpon>201502171124363_Task_Username.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Core\anthRContext.cs" />
     <Compile Include="Models\Core\MasterSite.cs" />
@@ -225,6 +241,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\application.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css">
       <DependentUpon>bootstrap.css</DependentUpon>
@@ -411,6 +428,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201501201542411_Timesheet_AlreadyBilled.resx">
       <DependentUpon>201501201542411_Timesheet_AlreadyBilled.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502171034141_Note_Username.resx">
+      <DependentUpon>201502171034141_Note_Username.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502171045336_Staff_Username.resx">
+      <DependentUpon>201502171045336_Staff_Username.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502171108216_Project_Username.resx">
+      <DependentUpon>201502171108216_Project_Username.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201502171124363_Task_Username.resx">
+      <DependentUpon>201502171124363_Task_Username.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

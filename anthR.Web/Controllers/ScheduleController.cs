@@ -19,8 +19,7 @@ namespace anthR.Web.Controllers
 {
     public class ScheduleController : Controller
     {
-
-        
+                
         private anthRContext _db = new anthRContext();
         
         // GET: Scedule
@@ -34,7 +33,20 @@ namespace anthR.Web.Controllers
 
             List<AnthRTask> anthRTask = null;
 
-            anthRTask = await _db.AnthRTask.Where(t => !id.HasValue && !t.DateCompleted.HasValue || t.ProjectId.Equals(id.Value) && !t.DateCompleted.HasValue)                
+            anthRTask = await _db.AnthRTask.Where(
+                    t => !id.HasValue 
+                    && !t.DateCompleted.HasValue 
+                    && (
+                        t.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
+                        || t.StaffOnTasks.Where(st => st.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Any()
+                        )
+                    || t.ProjectId.Equals(id.Value) 
+                    && !t.DateCompleted.HasValue
+                    && (
+                        t.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
+                        || t.StaffOnTasks.Where(st => st.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Any()
+                        )
+                )                
                 .OrderBy(p => p.Priority)
                 .ThenBy(p => p.Deadline)                
                 .ThenBy(p => p.PlannedStart)                

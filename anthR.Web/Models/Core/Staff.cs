@@ -10,6 +10,8 @@ namespace anthR.Web.Models.Core
     {
         
         public int Id { get; set; }
+
+        public string Username { get; set; }
                 
         public virtual ICollection<StaffOnProjects> StaffOnProjects { get; set; }
         

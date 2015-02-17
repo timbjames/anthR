@@ -27,5 +27,7 @@ namespace anthR.Web.Models.Core
         public virtual MasterSite MasterSite { get; set; }
         public virtual ICollection<AnthRTask> Tasks { get; set; }
 
+        public string Username { get; set; }
+
     }
 }

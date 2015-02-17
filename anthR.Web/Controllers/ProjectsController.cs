@@ -16,18 +16,32 @@ namespace anthR.Web.Controllers
         private anthRContext db = new anthRContext();
 
         // GET: Projects
-        public async Task<ActionResult> Index(bool? completed)
+        public async Task<ActionResult> Index(bool? completed, string all)
         {
             
             IQueryable<Project> project = null;
 
             if (!completed.HasValue)
             {
-                project = db.Project.Where(p => !p.Completed).Include(p => p.MasterSite).OrderBy(p => p.MasterSite.Name).ThenBy(p => p.Name);
+                project = db.Project.Where(p => !p.Completed 
+                        && (
+                            p.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
+                            || 
+                            p.StaffOnProjects.Where(sp => sp.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Any()
+                            || !string.IsNullOrEmpty(all)
+                        )
+                    ).Include(p => p.MasterSite).OrderBy(p => p.MasterSite.Name).ThenBy(p => p.Name);
             }
             else
             {
-                project = db.Project.Where(p => p.Completed).Include(p => p.MasterSite).OrderBy(p => p.MasterSite.Name).ThenBy(p => p.Name);
+                project = db.Project.Where(p => p.Completed 
+                    && (
+                        p.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
+                        || 
+                        p.StaffOnProjects.Where(sp => sp.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Any()
+                        || !string.IsNullOrEmpty(all)
+                    )
+                    ).Include(p => p.MasterSite).OrderBy(p => p.MasterSite.Name).ThenBy(p => p.Name);
             }
 
             return View(await project.ToListAsync());
@@ -66,6 +80,9 @@ namespace anthR.Web.Controllers
             if (ModelState.IsValid)
             {
                 
+                // add the username
+                project.Username = User.Identity.Name;
+
                 db.Project.Add(project);
                 await db.SaveChangesAsync();
                 //return RedirectToAction("Index");
@@ -100,7 +117,7 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,MasterSiteId,PlannedStart,Deadline,OnGoing")] Project project)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,MasterSiteId,PlannedStart,Deadline,OnGoing,Username")] Project project)
         {
             if (ModelState.IsValid)
             {

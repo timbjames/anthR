@@ -12,6 +12,7 @@ using anthR.Web.Models.Notes;
 
 namespace anthR.Web.Controllers
 {
+   
     public class NotesController : Controller
     {
        
@@ -20,7 +21,7 @@ namespace anthR.Web.Controllers
         // GET: Notes
         public async Task<ActionResult> Index()
         {
-            var note = db.Note.Include(n => n.Staff);
+            var note = db.Note.Where(n => n.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Include(n => n.Staff).OrderBy(n => n.Title);
             return View(await note.ToListAsync());
         }
 
@@ -53,15 +54,22 @@ namespace anthR.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create([Bind(Include = "Id,Title,Content,StaffId")] Note note)
         {
+            
             if (ModelState.IsValid)
             {
+                
+                // add the current user
+                note.Username = User.Identity.Name;
+
                 db.Note.Add(note);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
+
             }
 
             ViewBag.StaffId = new SelectList(db.Staff, "Id", "Name", note.StaffId);
             return View(note);
+
         }
 
         // GET: Notes/Edit/5
@@ -85,7 +93,7 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Content,StaffId")] Note note)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Title,Content,StaffId,Username")] Note note)
         {
             if (ModelState.IsValid)
             {
@@ -133,4 +141,5 @@ namespace anthR.Web.Controllers
         }
     
     }
+
 }

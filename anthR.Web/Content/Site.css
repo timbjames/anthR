@@ -3,11 +3,22 @@
     padding-bottom: 20px;
 }
 
+body.background-dark{
+    /*background-color:rgba(102,105,104,0.9);
+    background-image:radial-gradient(farthest-side ellipse at 10% 0, rgba(102,105,104,0.9),rgba(93,112,119,0.89),rgba(160,174,150,0.9));
+    background-image:-webkit-radial-gradient(10% 0, farthest-side ellipse, rgba(102,105,104,0.9), rgba(93,112,119,0.89), rgba(160,174,150,0.9));
+    background-image:-moz-radial-gradient(10% 0, farthest-side ellipse, rgba(102,105,104,0.9), rgba(93,112,119,0.89), rgba(160,174,150,0.9))*/
+}
+
 /* Set padding to keep content from hitting the edges */
-.body-content {
+/*.body-content {
     padding-left: 15px;
     padding-right: 15px;
 }
+
+.with-padding{
+    padding: 20px;
+}*/
 
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 

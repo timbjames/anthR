@@ -18,5 +18,7 @@ namespace anthR.Web.Models.Notes
         public int StaffId { get; set; }
         public virtual Core.Staff Staff { get; set; }
 
+        public string Username { get; set; }
+
     }
 }

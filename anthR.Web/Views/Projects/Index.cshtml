@@ -61,7 +61,14 @@
                 <div class="row">
                     <div class="btn btn-xs btn-group">
                         @Html.ActionLink("Add Staff", "Create", "StaffOnProjects", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-                        @Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                        @if (string.IsNullOrEmpty(Request["all"]))
+                        {
+                            @Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id, all = "true" }, new { @class = "btn btn-xs btn-primary" })
+                        }                        
                         @Html.ActionLink("Complete", "Complete", "Projects", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
                     </div>
                 </div>
@@ -73,6 +80,9 @@
                     </div>
                 </div>
             </td>
+
+
+
         </tr>
     }
 

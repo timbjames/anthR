@@ -19,14 +19,30 @@ namespace anthR.Web.Controllers
         private anthRContext _db = new anthRContext();
 
         // GET: AnthRTasks
-        public async Task<ActionResult> Index(int? id, bool? completed)
+        public async Task<ActionResult> Index(int? id, bool? completed, string all)
         {
             
             IQueryable<AnthRTask> anthRTask = null;
 
             if (!completed.HasValue)
             {
-                anthRTask = _db.AnthRTask.Where(t => !id.HasValue && !t.DateCompleted.HasValue || t.ProjectId.Equals(id.Value) && !t.DateCompleted.HasValue)                
+                anthRTask = _db.AnthRTask.Where(t => !id.HasValue 
+                    && !t.DateCompleted.HasValue 
+                    && (
+                            t.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
+                            || 
+                            t.StaffOnTasks.Where(st => st.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Any()
+                            || !string.IsNullOrEmpty(all)
+                        ) 
+                    || t.ProjectId.Equals(id.Value) 
+                    && !t.DateCompleted.HasValue 
+                    && (
+                        t.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
+                        || 
+                        t.StaffOnTasks.Where(st => st.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Any()
+                        || !string.IsNullOrEmpty(all)
+                    )
+                )                
                 .OrderBy(p => p.Priority)
                 .ThenBy(p => p.Deadline)                
                 .ThenBy(p => p.PlannedStart)                
@@ -34,7 +50,22 @@ namespace anthR.Web.Controllers
             }
             else
             {
-                anthRTask = _db.AnthRTask.Where(t => !id.HasValue && t.DateCompleted.HasValue || t.ProjectId.Equals(id.Value) && t.DateCompleted.HasValue)                
+                anthRTask = _db.AnthRTask.Where(t => !id.HasValue && t.DateCompleted.HasValue
+                    && (
+                        t.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
+                        || 
+                        t.StaffOnTasks.Where(st => st.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Any()
+                        || !string.IsNullOrEmpty(all)
+                    )
+                    || t.ProjectId.Equals(id.Value) 
+                    && t.DateCompleted.HasValue
+                    && (
+                        t.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
+                        || 
+                        t.StaffOnTasks.Where(st => st.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Any()
+                        || !string.IsNullOrEmpty(all)
+                    )
+                )                
                 .OrderBy(p => p.Priority)
                 .ThenBy(p => p.Deadline)                
                 .ThenBy(p => p.PlannedStart)                
@@ -84,6 +115,10 @@ namespace anthR.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                // add the username
+                anthRTask.Username = User.Identity.Name;
+
                 _db.AnthRTask.Add(anthRTask);
                 await _db.SaveChangesAsync();
                 //return RedirectToAction("Index");
@@ -124,7 +159,7 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,ProjectId,StatusId,Name,Description,RequestedBy,PlannedStart,Deadline,Priority")] AnthRTask anthRTask)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,ProjectId,StatusId,Name,Description,RequestedBy,PlannedStart,Deadline,Priority,Username")] AnthRTask anthRTask)
         {
             if (ModelState.IsValid)
             {

@@ -11,7 +11,10 @@ namespace anthR.Web.Models.Task
     public class AnthRTask
     {
         
-        public int Id { get; set; }       
+        public int Id { get; set; }
+
+        public string Username { get; set; }
+
         [Display(Name = "Task")]
         public string Name { get; set; }
         [DataType(DataType.MultilineText)]

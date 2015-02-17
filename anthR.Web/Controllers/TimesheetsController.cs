@@ -20,7 +20,7 @@ namespace anthR.Web.Controllers
         // GET: Timesheets
         public async Task<ActionResult> Index()
         {
-            var timesheets = db.Timesheets.Include(t => t.AnthRTask).Include(t => t.Staff);
+            var timesheets = db.Timesheets.Where(t => t.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Include(t => t.AnthRTask).Include(t => t.Staff);
             return View(await timesheets.ToListAsync());
         }
 
@@ -48,6 +48,12 @@ namespace anthR.Web.Controllers
             // load staff on task
             var staff = db.Staff.Where(s => s.StaffOnTasks.Where(t => !id.HasValue || t.AnthRTaskId.Equals(id.Value)).Any());
             
+            // need to load up the staff id for current username
+            if (!staffId.HasValue)
+            {
+                staffId = staff.Where(s => s.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Id;                
+            }
+
             ViewBag.AnthRTask = new SelectList(tasks.ToList(), "Id", "Name", (id.HasValue ? id.Value : 0));
             ViewBag.Staff = new SelectList(staff.ToList(), "Id", "Name", (staffId.HasValue ? staffId.Value : 0));
 
@@ -64,6 +70,8 @@ namespace anthR.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                // add the username                
                 db.Timesheets.Add(timesheet);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index", "Tasks");
@@ -152,7 +160,8 @@ namespace anthR.Web.Controllers
             masterSites = db.MasterSite
                 .Where(ms => ms.Projects
                     .Where(p => p.Tasks
-                        .Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()).Any());
+                        .Where(t => t.Timesheet.Where(ts => ts.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
+                            && ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()).Any());
                              
             return View(await masterSites.ToListAsync());            
 
@@ -175,7 +184,8 @@ namespace anthR.Web.Controllers
             masterSites = db.MasterSite
                 .Where(ms => ms.Projects
                     .Where(p => p.Tasks
-                        .Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()).Any());
+                        .Where(t => t.Timesheet.Where(ts => ts.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) &&
+                            ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()).Any());
 
             // need to load up the html from the Show action and email it out
             var body = anthR.Utils.IO.Razor.RenderViewToString(this, "Show", masterSites.ToList());
