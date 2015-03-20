@@ -10,5 +10,12 @@ namespace anthR.Web.Models.Core
     {
         public string Name { get; set; }
         public string Email { get; set; }
+
+        public string GravatarHash{
+            get{
+                return anthR.Utils.Crypto.MD5.GetHash(this.Email).ToLower();
+            }
+        }
+
     }
 }

@@ -34,14 +34,33 @@
                     <li>@Html.ActionLink("Staff", "Index", "Staff")</li>
                     <li>@Html.ActionLink("Monthy Timesheet", "Show", new { controller = "Timesheets", month = DateTime.Now.Month })</li>
                 </ul>
-                <p class="nav navbar-text navbar-right">Hello, @User.Identity.Name.Replace("KFS\\","")!</p>
+                <p class="nav navbar-text navbar-right">
+                    @{Html.RenderAction("StaffGravatar", "Staff");}
+                    Hello, @User.Identity.Name.Replace("KFS\\", "")!
+                </p>
             </div>
         </div>
     </div>
 
     <div class="container body-content">
-        
+
         @RenderBody()
+
+        <div id="searchBox" 
+             style="position: absolute; top: 62px; width: 1140px; padding: 50px; background-color: rgba(255,255,255,.75); display: none;">
+
+            <form>
+
+                <div class="form-group">
+                    <input type="text" placeholder="Search..." id="search" class="form-control" style="max-width: none;" />
+                </div>
+                <button type="button" class="btn btn-default" aria-label="Left Align">
+                  <span class="glyphicon glyphicon-remove close-search" aria-hidden="true"></span>
+                </button>
+        
+            </form>
+
+        </div>
 
         <hr />
 

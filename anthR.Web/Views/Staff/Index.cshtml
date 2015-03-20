@@ -7,6 +7,7 @@
 <p>
     @Html.ActionLink("Add Staff Member", "Create", "Staff", null, new { @class = "btn btn-xs btn-primary" })
 </p>
+
 <table class="table">
     <tr>
         <th>
@@ -20,6 +21,11 @@
 
 @foreach (var item in Model) {
     <tr>
+        <td>
+            <img class="gravatar" 
+                 src="@string.Format("https://secure.gravatar.com/avatar/{0}?s=30&d=mm", item.GravatarHash)" 
+                 title="Gravatar. if you don't have one, then added one for your work email!" />
+        </td>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
         </td>

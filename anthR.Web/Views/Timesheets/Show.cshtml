@@ -19,9 +19,20 @@
 
 @if (string.IsNullOrEmpty(Request["email"]))
 {
-    <p>
-        @Html.ActionLink("Send Email", "EmailTimesheet", new { controller = "Timesheets", month = 1, email = "yes" }, new { @class = "btn btn-sm btn-primary", target = "_blank" })
-    </p>
+    <form class="form-inline">
+        <div class="form-group">
+            <label>Email To:</label>
+            @Html.DropDownList("StaffId", (SelectList)ViewBag.Staff, "Please Select", htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="checkbox">
+            <label>
+              <input type="checkbox" id="chkCopyMeIn" /> Copy me in
+            </label>
+          </div>
+        @Html.ActionLink("Send Email", "EmailTimesheet",
+            new { controller = "Timesheets", month = month, email = "yes" },
+            new { @class = "btn btn-sm btn-primary", target = "_blank", id = "emailLink" })
+    </form>
 }
 
 <ul style="margin-left: 0; padding-left: 0; list-style: none;">
@@ -33,44 +44,65 @@
         totalIncome = 0;
         totalQuoted = 0;
 
+        var hasVat = item.HasVAT;
+
         <li style="margin-top: 10px; border-top: solid 1px #999;">
             <h4>@item.Name</h4>
             <ul>
                 @if (item.Projects.Any())
                 {
-                    foreach (var project in item.Projects.Where(p => p.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()))
+                    foreach (var project in item.Projects.Where(p => p.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate && ts.Staff.Username.Equals(User.Identity.Name)).Any()).Any()))
                     {
                         <li style="border: none;">
                             @project.Name
+                            @if (project.Quoted > 0)
+                            {
+                                if (project.DateCompleted.HasValue)
+                                {
+                                    <strong style="color: green;">Status: Completed</strong>
+                                    totalQuoted += project.Quoted;
+                                }
+                                else
+                                {
+                                    <strong style="color: red;">Status: Awaiting Completion</strong>
+                                }
+                                <br /><span><strong>Project Quoted @@ @project.Quoted.ToString("C") @(hasVat ? "+ VAT" : "") @(project.AlreadyBilled ? "Already Billed" : "Not Billed")</strong></span>
+                            }
                             <ul>
                                 @if (project.Tasks.Any())
                                 {
-                                    foreach (var task in project.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()))
+                                    foreach (var task in project.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate && ts.Staff.Username.Equals(User.Identity.Name)).Any()))
                                     {
                                         <li style="border: none;">
                                             @task.Name <strong style="color: @(task.DateCompleted.HasValue ? "green": "red")">Status: @(task.DateCompleted.HasValue ? "Completed" : "Awaiting Completion")</strong>
                                             <ul>
                                                 @if (task.Timesheet.Any())
                                                 {
-                                                    foreach (var timesheet in task.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate))
+                                                    foreach (var timesheet in task.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate && ts.Staff.Username.Equals(User.Identity.Name)))
                                                     {
                                                         <li>
-                                                            @if (timesheet.Quoted.Equals(0))
+                                                            @if (timesheet.Quoted.Equals(0) && timesheet.AnthRTask.Project.Quoted.Equals(0))
                                                             {
                                                                 <span title="@timesheet.Id">@timesheet.Hours hours @@ @timesheet.HourlyRate.ToString("C")</span>
                                                                 totalHours += timesheet.Hours;
                                                                 totalIncome += (timesheet.Hours * timesheet.HourlyRate);
                                                             }
+                                                            else if (timesheet.AnthRTask.Project.Quoted.Equals(0))
+                                                            {
+                                                                <span>Quoted @timesheet.Quoted.ToString("C") @(hasVat ? "+ VAT" : "") <strong>@(timesheet.AlreadyBilled ? "Already Billed" : "Not Billed")</strong></span>
+                                                                totalQuoted += timesheet.Quoted;
+                                                            }
                                                             else
                                                             {
-                                                                <span>Quoted @timesheet.Quoted.ToString("C") + VAT <strong>@(timesheet.AlreadyBilled ? "Already Billed" : "Not Billed")</strong></span>
-                                                                totalQuoted += timesheet.Quoted;
+                                                                <span title="@timesheet.Id">@timesheet.Hours hours</span>
+                                                                totalHours += timesheet.Hours;
                                                             }
                                                             @*<a href="/Timesheets/Delete/@timesheet.Id" class="btn btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>*@
                                                         </li>
                                                     }
                                                 }
                                             </ul>
+
                                         </li>
                                     }
                                 }
@@ -79,6 +111,13 @@
                     }
                 }
             </ul>
+
+
+
+
+
+
+
             <br />
             <i>
                 <strong>Total Hours: @totalHours</strong> /
@@ -99,4 +138,33 @@
     Overall Total: @total.ToString("C")
 </h4>
 
+@section scripts{
 
+    <script>
+        $(function () {
+            
+            $(document).on('click', '#emailLink', function (e) {
+
+                var url = $('#emailLink').attr('href');
+                var selectedEmail = $('#StaffId').val();
+                url = url.replace(/(email=)[^\&]+/, '$1' + selectedEmail);
+                url = url.replace(/(&me=)[^\&]+/, '');
+                if ($('#chkCopyMeIn').is(':checked')) {
+                    url = url + '&me=1';
+                }
+                else {
+                    url = url + '&me=0';
+                }
+                $('#emailLink').attr('href', url);
+
+                if ($('#StaffId').val() === '') {
+                    e.preventDefault();
+                    alert("Please Select an email.");
+                    return false;
+                }
+
+            });
+        });
+    </script>
+
+}

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using anthR.Web.Models.Core;
 using System.ComponentModel.DataAnnotations;
 
-namespace anthR.Web.Models.Task
+namespace anthR.Web.Models.arTask
 {
     public class AnthRTask
     {

@@ -1,8 +1,11 @@
-﻿@model anthR.Web.Models.Task.Timesheet
+﻿@model anthR.Web.Models.arTask.Timesheet
 
 @{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_TimesheetLayout.cshtml";
+
+    anthR.Web.Models.Core.Project _project = (anthR.Web.Models.Core.Project)ViewBag.Project;
+
 }
 
 <h2>Create</h2>
@@ -42,6 +45,14 @@
             </div>
         </div>
 
+        @if (_project.Quoted > 0)
+        {
+            <div class="form-group">
+                <label>Project Quoted at @_project.Quoted.ToString("C") @(_project.MasterSite.HasVAT ? "+ VAT": "")</label>
+            </div>
+        }
+        else
+        {
         <div class="form-group">
             @Html.LabelFor(model => model.HourlyRate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -57,6 +68,7 @@
                 @Html.ValidationMessageFor(model => model.Quoted, "", new { @class = "text-danger" })
             </div>
         </div>
+        }
 
         <div class="form-group">
             @Html.LabelFor(model => model.AlreadyBilled, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -75,7 +87,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.AnthRTaskId, "AnthRTaskId", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.AnthRTaskId, "Task", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.DropDownList("AnthRTaskId", (SelectList)ViewBag.AnthRTask, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.AnthRTaskId, "", new { @class = "text-danger" })

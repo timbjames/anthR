@@ -1,7 +1,65 @@
 ﻿@{
     ViewBag.Title = "About";
+    Layout = "~/Views/Shared/_BlankLayout.cshtml";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+@section head{    
+    
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.1.0/pure-min.css">
+    <link href="~/Content/AppCss/react-email/email.css" rel="stylesheet" />
+
+    @*<script src="http://use.typekit.net/ajf8ggy.js"></script>
+    <script>
+        try { Typekit.load(); } catch (e) {}
+    </script>*@
+
+    <script src="~/Scripts/zepto/zepto.min.js"></script>
+    <script src="~/Scripts/react/react-0.13.0.js"></script>
+    <script src="/Scripts/react/build/app.js"></script>
+
+}
+
+<div style="height: 10px;">&nbsp;</div>
+
+<div class="row">
+
+    <div class="col-sm-12">        
+        
+        <div id="emailApp"></div>
+
+    </div>
+
+</div>
+
+
+@section scripts{
+
+    <script src="http://yui.yahooapis.com/3.10.1/build/yui/yui-min.js"></script>
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+
+            var menuButton = Y.one('.nav-menu-button'),
+                nav        = Y.one('.id-nav');
+
+            // Setting the active class name expands the menu vertically on small screens.
+            menuButton.on('click', function (e) {
+                nav.toggleClass('active');
+            });
+
+            // Your application code goes here...
+
+        });
+    </script>
+
+    <script>
+        YUI().use('node-base', 'node-event-delegate', function (Y) {
+
+            // This just makes sure that the href="#" attached to the <a> elements
+            // don't scroll you back up the page.
+            Y.one('.content').delegate('click', function (e) {
+                e.preventDefault();
+            }, 'a[href="#"]');
+        });
+    </script>
+
+}

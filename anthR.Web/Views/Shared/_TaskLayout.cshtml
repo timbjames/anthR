@@ -21,7 +21,15 @@
     <script src="~/scripts/bootstrap-datetimepicker.js"></script>
     <script>
         $(function () {
-            $('.datetimepicker').datetimepicker();
+            // reference http://eonasdan.github.io/bootstrap-datetimepicker/ events
+            $('.datetimepicker').datetimepicker().on('dp.change', function (e) {
+                // catch start date change to update deadline
+                if (e.currentTarget.firstElementChild.id === 'PlannedStart') {                    
+                    // update deadline                       
+                    $('#Deadline-parent').data('DateTimePicker').setMinDate(e.date);
+                    $('#Deadline-parent').data('DateTimePicker').setDate(e.date);
+                }
+            });            
         });
     </script>
     @RenderSection("scripts", required: false)

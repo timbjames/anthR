@@ -75,7 +75,7 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Name,MasterSiteId,PlannedStart,Deadline,OnGoing")] Project project)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,MasterSiteId,PlannedStart,Deadline,OnGoing,Quoted")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -117,7 +117,7 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,MasterSiteId,PlannedStart,Deadline,OnGoing,Username")] Project project)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,Name,MasterSiteId,PlannedStart,Deadline,OnGoing,Username,Quoted")] Project project)
         {
             if (ModelState.IsValid)
             {
@@ -150,11 +150,12 @@ namespace anthR.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Complete([Bind(Include = "Id,DateCompleted")] Project model)
+        public async Task<ActionResult> Complete([Bind(Include = "Id,DateCompleted,AlreadyBilled")] Project model)
         {
             
             Project project = await db.Project.FindAsync(model.Id);
             project.DateCompleted = model.DateCompleted;
+            project.AlreadyBilled = model.AlreadyBilled;
             project.Completed = true;
             await db.SaveChangesAsync();
 

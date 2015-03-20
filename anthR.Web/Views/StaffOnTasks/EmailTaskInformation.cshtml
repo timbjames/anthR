@@ -1,0 +1,23 @@
+﻿@model anthR.Web.Models.arTask.AnthRTask
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@Model.Project.Name - @Model.Name</title>
+</head>
+<body>
+
+    <p>
+        @Model.Project.MasterSite.Name - @Model.Project.Name - @Model.Name
+    </p>
+
+    <p>You have been assigned to a Task. Please visit <a href="@string.Format("http://tim-hp:82/Tasks/Details/{0}", Model.Id)">anthR.Task</a> to view the details.</p>
+
+</body>
+</html>

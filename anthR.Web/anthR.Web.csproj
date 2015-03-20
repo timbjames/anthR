@@ -46,12 +46,23 @@
       <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Cors">
+      <HintPath>..\packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -61,6 +72,13 @@
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.2\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.Cors">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Cors.5.2.3\lib\net45\System.Web.Http.Cors.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -112,15 +130,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Net.Http.Formatting">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Http">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.0\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web.Http.WebHost">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
@@ -130,8 +139,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\API\StaffOnTasksController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
+    <Compile Include="Controllers\API\StaffOnProjectsController.cs" />
     <Compile Include="Controllers\StaffOnProjectsController.cs" />
     <Compile Include="Controllers\StaffOnTasksController.cs" />
     <Compile Include="Controllers\TasksController.cs" />
@@ -222,6 +233,22 @@
     <Compile Include="Migrations\201502171124363_Task_Username.Designer.cs">
       <DependentUpon>201502171124363_Task_Username.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201503021556316_MasterSite_LiveBidMasterSiteId.cs" />
+    <Compile Include="Migrations\201503021556316_MasterSite_LiveBidMasterSiteId.Designer.cs">
+      <DependentUpon>201503021556316_MasterSite_LiveBidMasterSiteId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503031622069_mastersite_novat.cs" />
+    <Compile Include="Migrations\201503031622069_mastersite_novat.Designer.cs">
+      <DependentUpon>201503031622069_mastersite_novat.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503031626233_project_quoted.cs" />
+    <Compile Include="Migrations\201503031626233_project_quoted.Designer.cs">
+      <DependentUpon>201503031626233_project_quoted.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503031653244_project_alreadybilled.cs" />
+    <Compile Include="Migrations\201503031653244_project_alreadybilled.Designer.cs">
+      <DependentUpon>201503031653244_project_alreadybilled.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Core\anthRContext.cs" />
     <Compile Include="Models\Core\MasterSite.cs" />
@@ -232,20 +259,23 @@
     <Compile Include="Models\Core\StaffOnProjects.cs" />
     <Compile Include="Models\Core\StaffOnTask.cs" />
     <Compile Include="Models\Core\Status.cs" />
+    <Compile Include="Models\Email\Notification.cs" />
     <Compile Include="Models\Notes\Note.cs" />
     <Compile Include="Models\Seed\anthRInitializer.cs" />
-    <Compile Include="Models\Task\AnthRTask.cs" />
-    <Compile Include="Models\Task\Timesheet.cs" />
+    <Compile Include="Models\arTask\AnthRTask.cs" />
+    <Compile Include="Models\arTask\Timesheet.cs" />
     <Compile Include="Models\Todo\TodoEditItemModel.cs" />
     <Compile Include="Models\Todo\TodoItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\AppCss\bootstrap\bootstrap-multiselect.css" />
     <Content Include="Content\application.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css">
       <DependentUpon>bootstrap.css</DependentUpon>
     </Content>
+    <Content Include="Content\AppCss\react-email\email.css" />
     <Content Include="Content\dark_wood.png" />
     <Content Include="Content\slide-bg.png" />
     <Content Include="Content\styles\bootstrap-datetimepicker.css" />
@@ -270,6 +300,7 @@
     <Content Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\bootstrap\bootstrap-multiselect.js" />
     <Content Include="Scripts\calendar.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -280,9 +311,17 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\react\JSXTransformer-0.13.0.js" />
+    <Content Include="Scripts\react\react-0.13.0-with-addons.js" />
+    <Content Include="Scripts\react\react-0.13.0-with-addons.min.js" />
+    <Content Include="Scripts\react\react-0.13.0.js" />
+    <Content Include="Scripts\react\react-0.13.0.min.js" />
+    <Content Include="Scripts\react\src\app.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\underscore-min.js" />
+    <Content Include="Scripts\zepto\zepto.js" />
+    <Content Include="Scripts\zepto\zepto.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -372,9 +411,13 @@
     <Content Include="Views\Schedule\Index.cshtml" />
     <Content Include="Views\Schedule\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_ScheduleLayout.cshtml" />
+    <Content Include="Views\Staff\StaffGravatar.cshtml" />
+    <Content Include="Views\StaffOnTasks\EmailTaskInformation.cshtml" />
+    <Content Include="Views\Shared\_BlankLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Scripts\react\build\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -440,6 +483,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201502171124363_Task_Username.resx">
       <DependentUpon>201502171124363_Task_Username.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503021556316_MasterSite_LiveBidMasterSiteId.resx">
+      <DependentUpon>201503021556316_MasterSite_LiveBidMasterSiteId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503031622069_mastersite_novat.resx">
+      <DependentUpon>201503031622069_mastersite_novat.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503031626233_project_quoted.resx">
+      <DependentUpon>201503031626233_project_quoted.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503031653244_project_alreadybilled.resx">
+      <DependentUpon>201503031653244_project_alreadybilled.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

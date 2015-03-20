@@ -8,7 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using anthR.Web.Models.Core;
-using anthR.Web.Models.Task;
+using anthR.Web.Models.arTask;
 using System.Net.Mail;
 
 namespace anthR.Web.Controllers
@@ -44,7 +44,8 @@ namespace anthR.Web.Controllers
         {
             
             // load up task if id is not empty
-            var tasks = db.AnthRTask.Where(t => !id.HasValue || t.Id.Equals(id.Value));
+            var tasks = db.AnthRTask.Where(t => !id.HasValue || t.Id.Equals(id.Value)).ToList();
+            //tasks.ForEach(t => { t.Name = t.Project.MasterSite.Name + " - " + t.Project.Name + " - " + t.Name; });
             // load staff on task
             var staff = db.Staff.Where(s => s.StaffOnTasks.Where(t => !id.HasValue || t.AnthRTaskId.Equals(id.Value)).Any());
             
@@ -54,8 +55,9 @@ namespace anthR.Web.Controllers
                 staffId = staff.Where(s => s.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Id;                
             }
 
-            ViewBag.AnthRTask = new SelectList(tasks.ToList(), "Id", "Name", (id.HasValue ? id.Value : 0));
+            ViewBag.AnthRTask = new SelectList(tasks, "Id", "Name", (id.HasValue ? id.Value : 0));
             ViewBag.Staff = new SelectList(staff.ToList(), "Id", "Name", (staffId.HasValue ? staffId.Value : 0));
+            ViewBag.Project = tasks.FirstOrDefault().Project;
 
             return View();
 
@@ -162,12 +164,14 @@ namespace anthR.Web.Controllers
                     .Where(p => p.Tasks
                         .Where(t => t.Timesheet.Where(ts => ts.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
                             && ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()).Any());
-                             
+                        
+            ViewBag.StaffId = new SelectList(db.Staff.ToList(), "Id", "Name");
+
             return View(await masterSites.ToListAsync());            
 
         }
 
-        public async Task<ActionResult> EmailTimesheet(int? id, int? month)
+        public ActionResult EmailTimesheet(int? id, int? month, int? email, string me)
         {
 
             // show the timesheet based on either the month, day or year
@@ -190,19 +194,34 @@ namespace anthR.Web.Controllers
             // need to load up the html from the Show action and email it out
             var body = anthR.Utils.IO.Razor.RenderViewToString(this, "Show", masterSites.ToList());
 
-            MailMessage email = null;
+            MailMessage mailMessage = null;
             SmtpClient smtpClient = null;
+
+            // need to get the staff email from the email id
+            var staffEmail = db.Staff.Where(s => s.Id.Equals(email.Value)).FirstOrDefault().Email;
+            var myEmail = string.Empty;
+            if (!string.IsNullOrEmpty(me))
+            {
+                // get my email
+                myEmail = db.Staff.Where(s => s.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Email;
+            }
+            
             try
             {
-                email = new MailMessage();
-                email.To.Add("tim@kingfisher-systems.co.uk");
-                email.From = new MailAddress("tim@kingfisher-systems.co.uk");
-                email.IsBodyHtml = true;
-                email.Body = body;
-                email.Subject = string.Format("{0} Timesheet", startDate.ToString("MMM yyyy"));
+                
+                mailMessage = new MailMessage();
+                mailMessage.To.Add(staffEmail);
+                if (!string.IsNullOrEmpty(myEmail))
+                {
+                    mailMessage.Bcc.Add(myEmail);
+                }
+                mailMessage.From = new MailAddress("online@kingfisher-systems.co.uk");
+                mailMessage.IsBodyHtml = true;
+                mailMessage.Body = body;
+                mailMessage.Subject = string.Format("{0} Timesheet", startDate.ToString("MMM yyyy"));
 
                 smtpClient = new SmtpClient();
-                smtpClient.Send(email);
+                smtpClient.Send(mailMessage);
 
             }
             catch (SmtpException smtpEx)

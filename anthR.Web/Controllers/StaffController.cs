@@ -115,6 +115,16 @@ namespace anthR.Web.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+                
+        public async Task<ActionResult> StaffGravatar()
+        {
+
+            var staffService = new anthR.Web.Models.Core.StaffService();
+            var staffMember = await staffService.GetStaffMemberAsync(User.Identity.Name);            
+
+            return View(staffMember);
+
+        }
 
         protected override void Dispose(bool disposing)
         {

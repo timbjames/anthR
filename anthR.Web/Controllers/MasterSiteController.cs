@@ -39,7 +39,8 @@ namespace anthR.Web.Controllers
 
             var masterSite = new MasterSite
             {
-                Name = model.Name
+                Name = model.Name,                
+                LiveBidMasterSiteId = model.LiveBidMasterSiteId
             };
 
             _db.MasterSite.Add(masterSite);

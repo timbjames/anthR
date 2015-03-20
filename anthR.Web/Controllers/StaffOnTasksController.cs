@@ -8,6 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using anthR.Web.Models.Core;
+using System.Net.Mail;
 
 namespace anthR.Web.Controllers
 {
@@ -17,7 +18,7 @@ namespace anthR.Web.Controllers
 
         // GET: StaffOnTasks
         public async Task<ActionResult> Index()
-        {
+        {             
             var staffOnTask = db.StaffOnTask.Include(s => s.AnthRTask).Include(s => s.Staff);
             return View(await staffOnTask.ToListAsync());
         }
@@ -62,7 +63,10 @@ namespace anthR.Web.Controllers
             {
                 db.StaffOnTask.Add(staffOnTask);
                 await db.SaveChangesAsync();
-                //return RedirectToAction("Index");
+                                
+                // send off email to the staff member informing them of the new task
+                this.SendTaskEmail(staffOnTask.AnthRTaskId, staffOnTask.StaffId);
+
                 //redirect to task index
                 return RedirectToAction("Index", "Tasks", new { id = id });
             }
@@ -133,6 +137,56 @@ namespace anthR.Web.Controllers
             db.StaffOnTask.Remove(staffOnTask);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        private void SendTaskEmail(int taskId, int staffId)
+        {
+            
+            // load up the task
+            var anthRTask = db.AnthRTask.Where(t => t.Id.Equals(taskId)).FirstOrDefault();
+            var body = anthR.Utils.IO.Razor.RenderViewToString(this, "EmailTaskInformation", anthRTask);
+
+            // get the staff member details
+            var staffMember = db.Staff.Where(s => s.Id.Equals(staffId)).FirstOrDefault();
+
+            var staffEmail = staffMember.Email;
+            
+            Task.Factory.StartNew(() =>
+            {
+                
+                MailMessage mailMessage = null;
+                SmtpClient smtpClient = null;
+
+                try
+                {
+                
+                    mailMessage = new MailMessage();
+                    mailMessage.To.Add(staffEmail);                
+                    mailMessage.From = new MailAddress("online@kingfisher-systems.co.uk");
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.Body = body;
+                    mailMessage.Subject = string.Format("anthR Task Assignment");
+
+                    smtpClient = new SmtpClient();
+                    smtpClient.Send(mailMessage);
+
+                }
+                catch (SmtpException smtpEx)
+                {
+                    throw smtpEx;
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+
+            }).ConfigureAwait(false);
+            
+        }
+
+        public ActionResult EmailTaskInformation()
+        {
+            return View();
         }
 
         protected override void Dispose(bool disposing)

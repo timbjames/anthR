@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Crypto\MD5.cs" />
     <Compile Include="IO\Razor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

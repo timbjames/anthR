@@ -23,6 +23,44 @@ body.background-dark{
 /* Override the default bootstrap behavior where horizontal description lists 
    will truncate terms that are too long to fit in the left column 
 */
+
+
+.navbar-text{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+img.gravatar {
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+    margin-right: 20px;
+    -moz-box-shadow: 1px 1px 40px 0 rgba(255, 255, 255, 0.75);
+    -webkit-box-shadow: 1px 1px 40px 0 rgba(255, 255, 255, 0.75);
+    box-shadow: 1px 1px 40px 0 rgba(255, 255, 255, 0.75);
+    -moz-transition: all ease 0.5s;
+    -o-transition: all ease 0.5s;
+    -webkit-transition: all ease 0.5s;
+    transition: all ease 0.5s;
+    cursor: pointer;
+}
+    img.gravatar:hover {
+        -moz-box-shadow: 1px 1px 40px 0 rgba(200, 200, 200, 0.75);
+        -webkit-box-shadow: 1px 1px 40px 0 rgba(200, 200, 200, 0.75);
+        box-shadow: 1px 1px 40px 0 rgba(200, 200, 200, 0.75);
+    }
+
+.navbar-nav > li > a {
+    -moz-transition: color ease 0.5s;
+    -o-transition: color ease 0.5s;
+    -webkit-transition: color ease 0.5s;
+    transition: color ease 0.5s;
+}
+/*.navbar-nav > li > a:hover{
+    text-shadow: 1px 1px 1px rgba(255,255,255,.75);
+}*/
+
 .dl-horizontal dt {
     white-space: normal;
 }

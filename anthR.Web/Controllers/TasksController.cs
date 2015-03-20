@@ -8,7 +8,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using anthR.Web.Models.Core;
-using anthR.Web.Models.Task;
+using anthR.Web.Models.arTask;
 
 namespace anthR.Web.Controllers
 {
@@ -96,9 +96,10 @@ namespace anthR.Web.Controllers
         {
 
             // get specific project if we have an id
-            var projects = _db.Project.Where(p => !id.HasValue || p.Id.Equals(id.Value));
+            var projects = _db.Project.Where(p => !id.HasValue || p.Id.Equals(id.Value)).ToList();
+            projects.ForEach(p => { p.Name = p.MasterSite.Name + " - " + p.Name; });
 
-            ViewBag.ProjectId = new SelectList(projects.ToList(), "Id", "Name");
+            ViewBag.ProjectId = new SelectList(projects, "Id", "Name");
             ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description");
             ViewBag.Priority = new SelectList(Enumerable.Range(1, 4), "Priority");
 

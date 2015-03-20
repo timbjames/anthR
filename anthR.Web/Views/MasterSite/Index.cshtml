@@ -22,15 +22,17 @@
             <table class="table">
                 <caption>Master Sites</caption>
                 <tr>
-                    <th>ID</th>
+                    @*<th>ID</th>*@
                     <th>Master Site</th>
+                    <th>Master Site Id</th>
                     <th class="text-right">Options</th>
                 </tr>
                 @foreach (var masterSite in Model)
                 {                    
                     <tr>
-                        <td>@masterSite.MasterSiteId</td>
+                        @*<td>@masterSite.MasterSiteId</td>*@
                         <td>@masterSite.Name</td>
+                        <td>@masterSite.LiveBidMasterSiteId</td>
                         <td class="text-right">
                             @Html.ActionLink("Details", "Details", "Todo", new { id = masterSite.MasterSiteId }, new { @class = "btn btn-xs btn-primary", role = "button" })
                             @Html.ActionLink("Edit", "Edit", "Todo", new { id = masterSite.MasterSiteId }, new { @class = "btn btn-xs btn-primary", role = "button" })

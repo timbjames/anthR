@@ -15,7 +15,7 @@ namespace anthR.Web.Models.Core
         public DbSet<Core.MasterSite> MasterSite { get; set; }
         public DbSet<Core.Project> Project { get; set; }
         public DbSet<Core.Staff> Staff { get; set; }
-        public DbSet<Task.AnthRTask> AnthRTask { get; set; }
+        public DbSet<arTask.AnthRTask> AnthRTask { get; set; }
         public DbSet<Core.StaffOnTask> StaffOnTask { get; set; }
         public DbSet<Notes.Note> Note { get; set; }
         public DbSet<Core.Status> Status { get; set; }
@@ -36,7 +36,7 @@ namespace anthR.Web.Models.Core
 
         public System.Data.Entity.DbSet<anthR.Web.Models.Core.StaffOnProjects> StaffOnProjects { get; set; }
 
-        public System.Data.Entity.DbSet<anthR.Web.Models.Task.Timesheet> Timesheets { get; set; }
+        public System.Data.Entity.DbSet<anthR.Web.Models.arTask.Timesheet> Timesheets { get; set; }
 
     }
 }

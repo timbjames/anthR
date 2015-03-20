@@ -23,11 +23,11 @@
 </p>
 <table class="table">
     <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.MasterSite.Name)
+        <th>            
+            Site
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Name)
+            Project
         </th>
         <th>
             Staff On Project
@@ -39,7 +39,7 @@
     @foreach (var item in Model)
     {        
         <tr class="@string.Format("task-count-{0}", @item.Tasks.Where(t => !t.DateCompleted.HasValue).Count())">
-            <td>
+            <td class="searchable">
                 @Html.DisplayFor(modelItem => item.MasterSite.Name)
             </td>
             <td>
@@ -61,6 +61,7 @@
                 <div class="row">
                     <div class="btn btn-xs btn-group">
                         @Html.ActionLink("Add Staff", "Create", "StaffOnProjects", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                        @Html.ActionLink("Add Task", "Create", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
                         @if (string.IsNullOrEmpty(Request["all"]))
                         {
                             @Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
@@ -68,15 +69,15 @@
                         else
                         {
                             @Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id, all = "true" }, new { @class = "btn btn-xs btn-primary" })
-                        }                        
-                        @Html.ActionLink("Complete", "Complete", "Projects", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                        }   
                     </div>
                 </div>
                 <div class="row">
                     <div class="btn btn-xs btn-group">
-                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-                        @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-xs btn-info" })
+                        @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-xs btn-info" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-xs btn-danger" })
+                        @Html.ActionLink("Complete", "Complete", "Projects", new { id = item.Id }, new { @class = "btn btn-xs btn-success" })
                     </div>
                 </div>
             </td>
@@ -100,6 +101,61 @@
                     $('.task-count-0').show();
                 }
             });
+
+            // handle Ctrl + S
+            $(document).on('keydown', function (e) { handleShortcuts(e); });
+            $(document).on('click', '.close-search', function () {
+                closeSearch();
+            });
+            var handleShortcuts = function (e) {
+
+                // Ctrl + F
+                if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
+                    e.preventDefault();
+                    // pop up custom search
+                    $('#searchBox').show();
+                    $('#search').focus();
+                }
+
+                // escape key
+                if (e.keyCode == 27) {
+                    closeSearch();
+                }
+
+            };
+
+            $(document).on('keyup', '#search', function () {
+                searchList();
+            });
+
+            var closeSearch = function () {
+                $('#searchBox').hide();
+                $('#search').val('');
+                searchList();
+            };
+
+            var searchList = function () {
+
+                var value = $('#search').val();
+
+                $("table tr").each(function (index) {
+                    if (index !== 0) {
+
+                        $row = $(this);
+
+                        var id = $row.find("td.searchable").text();
+                        if (id.toLowerCase().indexOf(value.toLowerCase()) > -1) {
+                            $row.show();
+                        }
+                        else {
+                            $row.hide();
+                        }
+
+                    }
+                });
+
+            };
+
         });
     </script>
 

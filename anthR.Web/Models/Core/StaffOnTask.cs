@@ -20,7 +20,7 @@ namespace anthR.Web.Models.Core
         [Key]
         [Column(Order = 1)]
         public int AnthRTaskId { get; set; }
-        public virtual Task.AnthRTask AnthRTask { get; set; }
+        public virtual arTask.AnthRTask AnthRTask { get; set; }
 
     }
 

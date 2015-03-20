@@ -1,4 +1,4 @@
-﻿@model IEnumerable<anthR.Web.Models.Task.AnthRTask>
+﻿@model IEnumerable<anthR.Web.Models.arTask.AnthRTask>
 
 @{
     ViewBag.Title = "Index";
@@ -86,7 +86,7 @@
                 <tr class="@string.Format("ps p-{0} s-{1}", item.Priority, item.StatusId)">
                     <td style="width: 2px; padding: 0; @string.Format("background-color: {0}", item.Status.HexColor)" title="@item.Status.Description">&nbsp;</td>
                     <td class="@string.Format("priority-{0}", item.Priority)" title="@string.Format("Priority {0}", item.Priority)" style="width: 2px; padding: 0;">&nbsp;</td>
-                    <td title="@string.Format("Status: {0} - Priority: {1}", item.Status.Description, item.Priority)">
+                    <td class="searchable" title="@string.Format("Status: {0} - Priority: {1}", item.Status.Description, item.Priority)">
                         <i>
                             @Html.DisplayFor(modelItem => item.Project.MasterSite.Name)<br />
                             <strong>@Html.DisplayFor(modelItem => item.Project.Name)</strong>
@@ -115,17 +115,17 @@
                             <div class="col-sm-12 text-right">
                                 <div class="btn btn-xs btn-group">
                                     @Html.ActionLink("Add Staff", "Create", "StaffOnTasks", new { id = item.ProjectId, taskId = item.Id }, new { @class = "btn btn-xs btn-primary" })
-                                    @Html.ActionLink("Allocate Time", "Create", "Timesheets", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-                                    @Html.ActionLink("Complete", "CompleteTask", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                                    @Html.ActionLink("Allocate Time", "Create", "Timesheets", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })                                    
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12 text-right">
                                 <div class="btn btn-xs btn-group">
-                                    @Html.ActionLink("Edit", "Edit", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-                                    @Html.ActionLink("Details", "Details", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
-                                    @Html.ActionLink("Delete", "Delete", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })
+                                    @Html.ActionLink("Edit", "Edit", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-info" })
+                                    @Html.ActionLink("Details", "Details", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-info" })
+                                    @Html.ActionLink("Delete", "Delete", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-danger" })
+                                    @Html.ActionLink("Complete", "CompleteTask", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-success" })
                                 </div>
                             </div>
                         </div>
@@ -149,7 +149,7 @@
             var $tasks = $('#project-tasks');
 
             $(document).on('change', '#status, #priority', function () { filterList(); });
-                        
+            
             var filterList = function () {
 
                 var status = $ddlStatus.val();
@@ -169,6 +169,60 @@
                 else {
                     $('.p-' + priority + '.s-' + status).show();
                 }
+
+            };
+
+            // handle Ctrl + S
+            $(document).on('keydown', function (e) { handleShortcuts(e); });
+            $(document).on('click', '.close-search', function () {
+                closeSearch();
+            });
+            var handleShortcuts = function (e) {
+
+                // Ctrl + F
+                if (e.keyCode === 114 || (e.ctrlKey && e.keyCode === 70)) {
+                    e.preventDefault();
+                    // pop up custom search
+                    $('#searchBox').show();
+                    $('#search').focus();
+                }
+
+                // escape key
+                if (e.keyCode == 27) {
+                    closeSearch();
+                }
+
+            };
+
+            $(document).on('keyup', '#search', function () {
+                searchList();
+            });
+
+            var closeSearch = function () {
+                $('#searchBox').hide();
+                $('#search').val('');
+                searchList();
+            };
+
+            var searchList = function () {
+
+                var value = $('#search').val();
+
+                $("table tr").each(function (index) {
+                    if (index !== 0) {
+
+                        $row = $(this);
+
+                        var id = $row.find("td.searchable").text();                        
+                        if (id.toLowerCase().indexOf(value.toLowerCase()) > -1) {
+                            $row.show();
+                        }
+                        else {
+                            $row.hide(); 
+                        }
+
+                    }
+                });
 
             };
 
