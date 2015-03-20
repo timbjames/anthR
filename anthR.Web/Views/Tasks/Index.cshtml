@@ -110,25 +110,21 @@
                         }
                     </td>
 
-                    <td class="text-right" style="width: 240px;">
-                        <div class="row">
-                            <div class="col-sm-12 text-right">
-                                <div class="btn btn-xs btn-group">
-                                    @Html.ActionLink("Add Staff", "Create", "StaffOnTasks", new { id = item.ProjectId, taskId = item.Id }, new { @class = "btn btn-xs btn-primary" })
-                                    @Html.ActionLink("Allocate Time", "Create", "Timesheets", new { id = item.Id }, new { @class = "btn btn-xs btn-primary" })                                    
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 text-right">
-                                <div class="btn btn-xs btn-group">
-                                    @Html.ActionLink("Edit", "Edit", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-info" })
-                                    @Html.ActionLink("Details", "Details", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-info" })
-                                    @Html.ActionLink("Delete", "Delete", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-danger" })
-                                    @Html.ActionLink("Complete", "CompleteTask", "Tasks", new { id = item.Id }, new { @class = "btn btn-xs btn-success" })
-                                </div>
-                            </div>
-                        </div>
+                    <td>
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                                <span class="glyphicon glyphicon-menu-hamburger"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>@Html.ActionLink("Add Staff", "Create", "StaffOnTasks", new { id = item.ProjectId, taskId = item.Id }, null)</li>
+                                <li>@Html.ActionLink("Allocate Time", "Create", "Timesheets", new { id = item.Id }, null) </li>                                    
+                                <li class="divider"></li>
+                                <li>@Html.ActionLink("Edit", "Edit", "Tasks", new { id = item.Id }, null)</li>
+                                <li>@Html.ActionLink("Details", "Details", "Tasks", new { id = item.Id }, null)</li>
+                                <li>@Html.ActionLink("Delete", "Delete", "Tasks", new { id = item.Id }, null)</li>
+                                <li>@Html.ActionLink("Complete", "CompleteTask", "Tasks", new { id = item.Id }, null)</li>
+                            </ul>
+                        </div>                                             
                     </td>
                 </tr>
             }

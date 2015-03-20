@@ -271,11 +271,9 @@
   <ItemGroup>
     <Content Include="Content\AppCss\bootstrap\bootstrap-multiselect.css" />
     <Content Include="Content\application.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css">
-      <DependentUpon>bootstrap.css</DependentUpon>
-    </Content>
     <Content Include="Content\AppCss\react-email\email.css" />
+    <Content Include="Content\bootstrap\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap\bootstrap.css" />
     <Content Include="Content\dark_wood.png" />
     <Content Include="Content\slide-bg.png" />
     <Content Include="Content\styles\bootstrap-datetimepicker.css" />
@@ -292,12 +290,17 @@
     <Content Include="Content\tmpls\year.html" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Properties\DataSources\System.Xml.Linq.XElement.datasource" />
+    <Content Include="fonts\glyphicons\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons\glyphicons-halflings-regular.woff2" />
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap\bootstrap-multiselect.js" />

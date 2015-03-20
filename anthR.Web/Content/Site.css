@@ -24,6 +24,11 @@ body.background-dark{
    will truncate terms that are too long to fit in the left column 
 */
 
+/* reduce the padding on the dropdown menu within the tables */
+.table-with-navbar-dropdown .navbar-nav>li>a{
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
 
 .navbar-text{
     margin-top: 10px;
