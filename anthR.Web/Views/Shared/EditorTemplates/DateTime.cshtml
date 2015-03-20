@@ -5,7 +5,7 @@
 }
 
 <div class="input-group date datetimepicker" id="@string.Format("{0}-parent", fieldName)">
-    @Html.TextBox(string.Empty, ViewContext.ViewData.TemplateInfo.FormattedModelValue, new { @class = "form-control", data_date_format = "DD/MM/YYYY hh:mm" })
+    @Html.TextBox(string.Empty, ViewContext.ViewData.TemplateInfo.FormattedModelValue, new { @class = "form-control", data_date_format = "DD/MM/YYYY hh:mm A" })
     <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
 </div>
 

@@ -95,10 +95,10 @@
                         <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
                     </td>
                     <td>
-                        @(item.PlannedStart.Year > 1900 ? item.PlannedStart.ToString("dd MMM h:mm") : "n/a")
+                        @(item.PlannedStart.Year > 1900 ? item.PlannedStart.ToString("dd MMM hh:mm tt") : "n/a")
                     </td>
                     <td>
-                        @(item.Deadline.Year > 1900 ? item.Deadline.ToString("dd MMM h:mm") : "n/a")
+                        @(item.Deadline.Year > 1900 ? item.Deadline.ToString("dd MMM hh:mm tt") : "n/a")
                     </td>
                     <td>
                         @if (item.StaffOnTasks.Any())

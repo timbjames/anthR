@@ -20,10 +20,15 @@ namespace anthR.Web.Models.arTask
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime Deadline { get; set; }
+
         [Display(Name = "Planned Start")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime PlannedStart { get; set; }
+
         [Display(Name = "Date Completed")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime? DateCompleted { get; set; }
 
         [Display(Name = "Requested By")]
