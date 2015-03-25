@@ -35,10 +35,10 @@
         <th>Current Tasks</th>
         <th class="text-right">Options</th>
     </tr>
-
+    <tbody>
     @foreach (var item in Model)
     {        
-        <tr class="@string.Format("task-count-{0}", @item.Tasks.Where(t => !t.DateCompleted.HasValue).Count())">
+        <tr class="rowlink @string.Format("task-count-{0}", @item.Tasks.Where(t => !t.DateCompleted.HasValue).Count())">
             <td class="searchable">
                 @Html.DisplayFor(modelItem => item.MasterSite.Name)
             </td>
@@ -67,11 +67,11 @@
                         <li>@Html.ActionLink("Add Task", "Create", "Tasks", new { id = item.Id }, null)</li>
                         @if (string.IsNullOrEmpty(Request["all"]))
                         {
-                            <li>@Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id }, null)</li>
+                            <li>@Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id }, new { @class = "mainlink" })</li>
                         }
                         else
                         {
-                            <li>@Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id, all = "true" }, null)</li>
+                            <li>@Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id, all = "true" }, new { @class = "mainlink" })</li>
                         }   
                         <li class="divider"></li>
                         <li>@Html.ActionLink("Edit", "Edit", new { id = item.Id }, null)</li>
@@ -83,14 +83,19 @@
             </td>
         </tr>
     }
-
+    </tbody>
 </table>
 
 
 @section scripts{
-
+    
     <script>
         $(function () {
+
+            $(document).on('click', '.rowlink', function (e) {
+                window.location = $($(this).find('.mainlink').get(0)).attr('href');
+            });
+
             $('#with-tasks').on('click', function () {
                 if ($(this).is(':checked')) {
                     $('.task-count-0').hide();
