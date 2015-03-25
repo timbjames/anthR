@@ -1,0 +1,15 @@
+﻿@{
+   
+    var months = System.Globalization.DateTimeFormatInfo
+                   .InvariantInfo
+                   .MonthNames
+                   .Select((monthName, index) => new SelectListItem
+                   {
+                       Value = (index + 1).ToString(),
+                       Text = monthName
+                   });
+
+}
+
+@Html.DropDownList("month", months, new { @class = "form-control" })
+

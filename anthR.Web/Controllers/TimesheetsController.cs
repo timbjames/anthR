@@ -112,7 +112,7 @@ namespace anthR.Web.Controllers
             {
                 db.Entry(timesheet).State = EntityState.Modified;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Show", new { month = DateTime.Now.Month });
             }
             ViewBag.AnthRTaskId = new SelectList(db.AnthRTask, "Id", "Name", timesheet.AnthRTaskId);
             ViewBag.StaffId = new SelectList(db.Staff, "Id", "Name", timesheet.StaffId);

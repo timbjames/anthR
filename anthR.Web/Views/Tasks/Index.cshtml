@@ -10,6 +10,8 @@
     }
 }
 
+@*http://codyhouse.co/demo/contact-form/index.html*@
+
 <div class="row">
 
     <div class="col-sm-6">
@@ -187,6 +189,17 @@
                 if (e.keyCode == 27) {
                     closeSearch();
                 }
+
+                // Ctrl + C
+                if (e.ctrlKey && e.keyCode === 67) {
+                    // load create form into modal
+                    var $modal = $('<div />').addClass('modal').addClass('show');
+                    var $modalInner = $('<div />').addClass('modal-inner');
+                    $.get('/tasks/createajaxform', null, function (data) {
+                        $modalInner.append(data);
+                        $('body').append($modal.append($modalInner));
+                    });                    
+                }                
 
             };
 

@@ -33,10 +33,16 @@
                         @*<td>@masterSite.MasterSiteId</td>*@
                         <td>@masterSite.Name</td>
                         <td>@masterSite.LiveBidMasterSiteId</td>
-                        <td class="text-right">
-                            @Html.ActionLink("Details", "Details", "Todo", new { id = masterSite.MasterSiteId }, new { @class = "btn btn-xs btn-primary", role = "button" })
-                            @Html.ActionLink("Edit", "Edit", "Todo", new { id = masterSite.MasterSiteId }, new { @class = "btn btn-xs btn-primary", role = "button" })
-                            @*@Html.ActionLink("Delete", "Delete", "Todo", new { id = todo.Id }, new { @class = "btn btn-xs btn-primary", role = "button" })*@
+                        <td>
+                            <div class="btn-group pull-right">
+                                <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                                    <span class="glyphicon glyphicon-menu-hamburger"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>@Html.ActionLink("Details", "Details", "Todo", new { id = masterSite.MasterSiteId }, null)</li>
+                                    <li>@Html.ActionLink("Edit", "Edit", "Todo", new { id = masterSite.MasterSiteId }, null)</li>                                       
+                                </ul>
+                            </div> 
                         </td>
                     </tr>
                 }

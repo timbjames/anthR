@@ -107,6 +107,19 @@ namespace anthR.Web.Controllers
 
         }
 
+        public ActionResult CreateAjaxForm(int? id)
+        {
+             // get specific project if we have an id
+            var projects = _db.Project.Where(p => !id.HasValue || p.Id.Equals(id.Value)).ToList();
+            projects.ForEach(p => { p.Name = p.MasterSite.Name + " - " + p.Name; });
+
+            ViewBag.ProjectId = new SelectList(projects, "Id", "Name");
+            ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description");
+            ViewBag.Priority = new SelectList(Enumerable.Range(1, 4), "Priority");
+
+            return View();
+        }
+
         // POST: AnthRTasks/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
