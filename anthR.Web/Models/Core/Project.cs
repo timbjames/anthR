@@ -34,6 +34,7 @@ namespace anthR.Web.Models.Core
 
         public double Quoted { get; set; }
         public bool AlreadyBilled { get; set; }
+        public bool? HideFromTimesheet { get; set; }
 
     }
 }

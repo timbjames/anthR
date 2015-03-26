@@ -3,7 +3,7 @@
 @{
     if (!string.IsNullOrEmpty(Request["email"]))
     {
-        Layout = null;
+        Layout = null;        
     }
     int totalHours = 0;
     int totalIncome = 0;
@@ -15,6 +15,14 @@
     DateTime startDate = new DateTime(DateTime.Now.Year, month, 1);
     DateTime endDate = new DateTime(DateTime.Now.Year, month, daysInMonth);
 
+}
+
+@if (!string.IsNullOrEmpty(Request["email"])){
+    <style>            
+        .email .hide-me{
+            display: none;
+        }
+    </style>
 }
 
 @if (string.IsNullOrEmpty(Request["email"]))
@@ -49,7 +57,7 @@
      </div>
 }
 
-<ul style="margin-left: 0; padding-left: 0; list-style: none;" class="@(!string.IsNullOrEmpty(Request["email"]) ? "print": "")">
+<ul style="margin-left: 0; padding-left: 0; list-style: none;" class="@(!string.IsNullOrEmpty(Request["email"]) ? "email": "")">
 
     @foreach (var item in Model)
     {
@@ -67,8 +75,8 @@
                 {
                     foreach (var project in item.Projects.Where(p => p.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate && ts.Staff.Username.Equals(User.Identity.Name)).Any()).Any()))
                     {
-                        <li style="border: none;">
-                            @project.Name
+                        <li style="border: none;" class="@(project.HideFromTimesheet.HasValue ? project.HideFromTimesheet.Value ? "hide-me" : "" : "")">
+                            @project.Name <a href="#" data-type="1" data-id="@project.Id" data-hidden="@project.HideFromTimesheet" class="hide-me" title="Hide Project from email"><i class="glyphicon @(project.HideFromTimesheet.HasValue ? project.HideFromTimesheet.Value ? "glyphicon-eye-close" : "glyphicon-eye-open" : "glyphicon-eye-open")"></i></a>
                             @if (project.Quoted > 0)
                             {
                                 if (project.DateCompleted.HasValue)
@@ -87,14 +95,15 @@
                                 {
                                     foreach (var task in project.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate && ts.Staff.Username.Equals(User.Identity.Name)).Any()))
                                     {
-                                        <li style="border: none;">
+                                        <li style="border: none;" class="@(task.HideFromTimesheet.HasValue ? task.HideFromTimesheet.Value ? "hide-me" : "" : "")">
                                             @task.Name <strong style="color: @(task.DateCompleted.HasValue ? "green": "red")">Status: @(task.DateCompleted.HasValue ? "Completed" : "Awaiting Completion")</strong>
+                                            <a href="#" data-type="2" data-id="@task.Id" data-hidden="@task.HideFromTimesheet" class="hide-me" title="Hide Task from email"><i class="glyphicon @(task.HideFromTimesheet.HasValue ? task.HideFromTimesheet.Value ? "glyphicon-eye-close" : "glyphicon-eye-open" : "glyphicon-eye-open")"></i></a>
                                             <ul>
                                                 @if (task.Timesheet.Any())
                                                 {
                                                     foreach (var timesheet in task.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate && ts.Staff.Username.Equals(User.Identity.Name)))
                                                     {
-                                                        <li>
+                                                        <li class="@(timesheet.HideFromTimesheet.HasValue ? timesheet.HideFromTimesheet.Value ? "hide-me" : "" : "")">
                                                             @if (timesheet.Quoted.Equals(0) && timesheet.AnthRTask.Project.Quoted.Equals(0))
                                                             {
                                                                 <span title="@timesheet.Id">@timesheet.Hours hours @@ @timesheet.HourlyRate.ToString("C")</span>
@@ -113,6 +122,7 @@
                                                             }
                                                             @*<a href="/Timesheets/Delete/@timesheet.Id" class="btn btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>*@
                                                             <a href="/Timesheets/Edit/@timesheet.Id" class="btn btn-xs" title="Edit Timesheet Entry"><i class="glyphicon glyphicon-pencil"></i></a>
+                                                            <a href="#" data-type="3" data-id="@timesheet.Id" data-hidden="@timesheet.HideFromTimesheet" class="hide-me" title="Hide Time from email"><i class="glyphicon @(timesheet.HideFromTimesheet.HasValue ? timesheet.HideFromTimesheet.Value ? "glyphicon-eye-close" : "glyphicon-eye-open" : "glyphicon-eye-open")"></i></a>
                                                         </li>
                                                     }
                                                 }
@@ -125,23 +135,18 @@
                         </li>
                     }
                 }
-                    </ul>
+                
+            </ul>
+                    
+            <br />
+            <i>
+                <strong>Total Hours: @totalHours</strong> /
+                <strong>Total Hourly Income: @totalIncome.ToString("C")</strong> /
+                <strong>Total Quoted: @totalQuoted.ToString("C")</strong> /
+                <strong>Total Income: @((totalQuoted + Convert.ToDouble(totalIncome)).ToString("C"))</strong>
+            </i>
 
-
-
-
-
-
-
-                    <br />
-                    <i>
-                        <strong>Total Hours: @totalHours</strong> /
-                        <strong>Total Hourly Income: @totalIncome.ToString("C")</strong> /
-                        <strong>Total Quoted: @totalQuoted.ToString("C")</strong> /
-                        <strong>Total Income: @((totalQuoted + Convert.ToDouble(totalIncome)).ToString("C"))</strong>
-                    </i>
-
-                </li>
+        </li>
 
         total += totalQuoted + Convert.ToDouble(totalIncome);
 
@@ -179,6 +184,55 @@
                         }
 
                     });
+
+                    $(document).on('click', '.hide-me', function (e) {
+
+                        e.preventDefault();
+                                                
+                        var $this = $(this);
+
+                        // handle the data
+                        var hidden = $this.data().hidden;
+
+                        if (hidden === ''){
+                            hidden = 'false';
+                        }
+
+                        // post to the API to set the DB value
+                        $.post('/api/timesheet', { Id: $this.data().id, Type: $this.data().type, Hide: hidden }, function () {
+
+                        }).done(function (data, textStatus, xhr) {
+
+                            // check the status code
+                            switch (xhr.status) {
+                                case 200:
+                                    // everything is fine and dandy!
+
+                                    // handle the UI                        
+                                    switch (hidden.toLowerCase()) {                                       
+                                        case "false":
+                                            // remove glyphicon-eye-open
+                                            // add glyphicon-eye-close
+                                            $this.children('i').removeClass('glyphicon-eye-open').addClass('glyphicon-eye-close');
+                                            $this.data('hidden', 'true');
+                                            $this.parent('li').addClass('hide-me');
+                                            break;
+                                        case "true":
+                                            // remove glyphicon-eye-close
+                                            // add glyphicon-eye-open
+                                            $this.children('i').removeClass('glyphicon-eye-close').addClass('glyphicon-eye-open');
+                                            $this.data('hidden', 'false');
+                                            $this.parent('li').removeClass('hide-me');
+                                            break;
+                                    }
+
+                            }
+
+                        });
+
+                                                
+                    });
+
                 });
             </script>
         }

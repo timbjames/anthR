@@ -30,6 +30,7 @@ namespace anthR.Web.Models.arTask
 
         public int AnthRTaskId { get; set; }
         public virtual AnthRTask AnthRTask { get; set; }
+        public bool? HideFromTimesheet { get; set; }
 
     }
 

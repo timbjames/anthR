@@ -47,6 +47,7 @@ namespace anthR.Web.Models.arTask
         public int Priority { get; set; }
 
         public virtual ICollection<Timesheet> Timesheet { get; set; }
+        public bool? HideFromTimesheet { get; set; }
 
     }
 }

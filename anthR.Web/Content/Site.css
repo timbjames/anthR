@@ -152,3 +152,12 @@ caption{
 .modal-inner form{
     color: #fff;
 }
+
+li.hide-me{
+    background-color: #fff;
+    opacity: .4;
+}
+
+li.hide-me li i.glyphicon-eye-open, li.hide-me li i.glyphicon-eye-close{
+    display: none;
+}
