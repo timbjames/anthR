@@ -1,39 +1,29 @@
-﻿using System;
+﻿using anthR.Web.Models.arTask;
+using anthR.Web.Models.Core;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
-using System.Web;
-using System.Web.Mvc;
-using anthR.Web.Models.Core;
-using anthR.Web.Models.arTask;
-using System.Runtime.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
-using System.Runtime.Serialization.Json;
+using System.Net.Http;
+using System.Web.Http;
 
-namespace anthR.Web.Controllers
+namespace anthR.Web.Controllers.API
 {
-    public class ScheduleController : Controller
+    public class ScheduleController : ApiController
     {
-                
-        private anthRContext _db = new anthRContext();
-        
-        // GET: Scedule
-        public ActionResult Index()
-        {
-            return View();
-        }
 
-        public async Task<ActionResult> GetSchedule(int? id)
+        private anthRContext _db = new anthRContext();
+
+        public ScheduleResult Get()
         {
+
+            int? id = null;
 
             List<AnthRTask> anthRTask = null;
 
-            anthRTask = await _db.AnthRTask.Where(
+            anthRTask = _db.AnthRTask.Where(
                     t => !id.HasValue 
                     && !t.DateCompleted.HasValue 
                     && (
@@ -50,7 +40,7 @@ namespace anthR.Web.Controllers
                 .OrderBy(p => p.Priority)
                 .ThenBy(p => p.Deadline)                
                 .ThenBy(p => p.PlannedStart)                
-                .Include(a => a.Project).ToListAsync();
+                .Include(a => a.Project).ToList();
 
             ScheduleResult result = new ScheduleResult();
             result.success = 1;
@@ -60,12 +50,12 @@ namespace anthR.Web.Controllers
                 start = s.PlannedStart.ToJavaScriptMilliseconds(),                
                 id = s.Id,
                 theClass = string.Format("event-priority-{0}", s.Priority),
-                title = string.Format("{0} - {1}", s.Project.MasterSite.Name, s.Project.Name),
+                title = string.Format("{0} - {1} - {2}", s.Project.MasterSite.Name, s.Project.Name, s.Name),
                 url = string.Format("/tasks/details/{0}", s.Id)
             }).ToList();
 
-            return Json(result, JsonRequestBehavior.AllowGet);
-           
+            return result;
+
         }
 
         protected override void Dispose(bool disposing)
@@ -78,21 +68,5 @@ namespace anthR.Web.Controllers
         }
 
     }
-
-    public class ScheduleResult
-    {
-        public int success { get; set; }
-        public List<Events> result { get; set; }
-    }
-
-    public class Events
-    {
-        public int id { get; set; }
-        public string title { get; set; }
-        public string url { get; set; }        
-        public string theClass { get; set; }      
-        public long start { get; set; }
-        public long end { get; set; }
-    }
-
+    
 }

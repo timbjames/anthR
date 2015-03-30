@@ -139,9 +139,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\API\ScheduleController.cs" />
     <Compile Include="Controllers\API\StaffOnTasksController.cs" />
     <Compile Include="Controllers\API\TimesheetController.cs" />
-    <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="Controllers\API\StaffOnProjectsController.cs" />
     <Compile Include="Controllers\StaffOnProjectsController.cs" />
@@ -259,6 +259,7 @@
       <DependentUpon>201503261225371_hidefromtimesheet_2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\arTask\Schedule.cs" />
     <Compile Include="Models\Core\anthRContext.cs" />
     <Compile Include="Models\Core\MasterSite.cs" />
     <Compile Include="Models\Core\MasterSiteEditModel.cs" />
