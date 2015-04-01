@@ -39,7 +39,7 @@
                         <input type="checkbox" id="chkCopyMeIn" /> Copy me in
                     </label>
                 </div>
-                @Html.ActionLink("Send Email", "EmailTimesheet",
+                @Html.RawActionLink("<i class=\"glyphicon glyphicon-send\"></i> Send Email", "EmailTimesheet", "Timesheets",
                 new { controller = "Timesheets", month = month, email = "yes" },
                 new { @class = "btn btn-sm btn-primary", target = "_blank", id = "emailLink" })
             </form>
@@ -50,7 +50,7 @@
                     <label>Show Month:</label>
                     @{ Html.RenderPartial("_MonthsDropDown");}
                 </div>
-                <button class="btn btn-sm btn-primary" type="submit">Change Month</button>
+                <button class="btn btn-sm btn-primary" type="submit"><i class="glyphicon glyphicon-refresh"></i> Change Month</button>
             </form>
         </div>
 

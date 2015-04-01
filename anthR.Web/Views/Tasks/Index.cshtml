@@ -15,48 +15,50 @@
 <div class="row">
 
     <div class="col-sm-6">
-        @Html.ActionLink("Create New Task", "Create", "Tasks", new { id = _id }, new { @class = "btn btn-xs btn-primary" })
+        @Html.RawActionLink("<i class=\"glyphicon glyphicon-plus-sign\"></i> Create New Task", "Create", "Tasks", new { id = _id }, new { @class = "btn btn-xs btn-primary" })
         |
         @if (string.IsNullOrEmpty(Request["completed"]))
         {
-            @Html.ActionLink("Completed Tasks", "Index", "Tasks", new { completed = true }, new { @class = "btn btn-xs btn-primary" })
+            @Html.RawActionLink("Completed Tasks", "Index", "Tasks", new { completed = true }, new { @class = "btn btn-xs btn-primary" })
         }
         else
         {
-            @Html.ActionLink("Live Tasks", "Index", "Tasks", null, new { @class = "btn btn-xs btn-primary" })
+            @Html.RawActionLink("Live Tasks", "Index", "Tasks", null, new { @class = "btn btn-xs btn-primary" })
         }        
     </div>
         
     <div class="col-sm-6">
-
+        
         <form class="form-group form-group-sm form-inline">
             <fieldset>
-                <div class="col-sm-4 pull-right">
-                    <label>
-                        Priority
-                        <select class="form-control" id="priority">
-                            <option value="0">All</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>                        
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </label>
+                <div class="row">
+                    <div class="col-sm-4 pull-right">
+                        <label class="pull-right">
+                            Priority
+                            <select class="form-control" id="priority">
+                                <option value="0">All</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="col-sm-5 pull-right">
+                        <label class="pull-right">
+                            Status
+                            <select class="form-control" id="status">
+                                <option value="0">All</option>
+                                <option value="1">Awaiting Start</option>
+                                <option value="2">In-Progress</option>
+                                <option value="3">Waiting</option>
+                                <option value="4">Complete</option>
+                                <option value="5">Delegated</option>
+                            </select>
+                        </label>
+                    </div>
                 </div>
-                <div class="col-sm-5 pull-right">
-                    <label>
-                        Status
-                        <select class="form-control" id="status">
-                            <option value="0">All</option>
-                            <option value="1">Awaiting Start</option>
-                            <option value="2">In-Progress</option>                        
-                            <option value="3">Waiting</option>
-                            <option value="4">Complete</option>
-                            <option value="5">Delegated</option>
-                        </select>
-                    </label>
-                </div>                
             </fieldset>
         </form>
 
@@ -68,11 +70,10 @@
 
     <div class="col-sm-12 with-padding">
 
-        <table class="table table-hover" id="project-tasks">
-            <caption>Project Task</caption>
+        <table class="table table-hover" id="project-tasks">            
             <tr>
-                <th style="width: 2px; padding: 0;">&nbsp;</th>
-                <th style="width: 2px; padding: 0;">&nbsp;</th>
+                <th style="width: 4px; padding: 0;"></th>
+                <th style="width: 4px; padding: 0;"></th>
                 <th>
                     Task
                 </th>
@@ -86,8 +87,8 @@
             {
 
                 <tr class="@string.Format("ps p-{0} s-{1}", item.Priority, item.StatusId)">
-                    <td style="width: 2px; padding: 0; @string.Format("background-color: {0}", item.Status.HexColor)" title="@item.Status.Description">&nbsp;</td>
-                    <td class="@string.Format("priority-{0}", item.Priority)" title="@string.Format("Priority {0}", item.Priority)" style="width: 2px; padding: 0;">&nbsp;</td>
+                    <td style="width: 4px; padding: 0; @string.Format("background-color: {0}", item.Status.HexColor)" title="@item.Status.Description"></td>
+                    <td class="@string.Format("priority-{0}", item.Priority)" title="@string.Format("Priority {0}", item.Priority)" style="width: 4px; padding: 0;"></td>
                     <td class="searchable" title="@string.Format("Status: {0} - Priority: {1}", item.Status.Description, item.Priority)">
                         <i>
                             @Html.DisplayFor(modelItem => item.Project.MasterSite.Name)<br />

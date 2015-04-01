@@ -4,26 +4,35 @@
     ViewBag.Title = "Index";
 }
 
-<p>
-    @Html.ActionLink("Create New Project", "Create", "Projects", null, new { @class = "btn btn-xs btn-primary" })
-    |
-    @if (string.IsNullOrEmpty(Request["completed"]))
-    {
-        @Html.ActionLink("Completed Projects", "Index", "Projects", new { completed = true }, new { @class = "btn btn-xs btn-primary" })
-    }
-    else
-    {
-        @Html.ActionLink("Live Projects", "Index", "Projects", null, new { @class = "btn btn-xs btn-primary" })
-    }    
-    <div class="checkbox pull-right">
-        <label>
-            <input type="checkbox" id="with-tasks" /> With Current Tasks
-        </label>
-    </div>    
-</p>
+<div class="row">
+
+    <div class="col-sm-6">
+        @Html.RawActionLink("<i class=\"glyphicon glyphicon-plus-sign\"></i> Create New Project", "Create", "Projects", null, new { @class = "btn btn-xs btn-primary" })
+        |
+        @if (string.IsNullOrEmpty(Request["completed"]))
+        {
+            @Html.ActionLink("Completed Projects", "Index", "Projects", new { completed = true }, new { @class = "btn btn-xs btn-primary" })
+        }
+        else
+        {
+            @Html.ActionLink("Live Projects", "Index", "Projects", null, new { @class = "btn btn-xs btn-primary" })
+        }
+    </div>
+    <div class="col-sm-6">
+
+        <div class="checkbox pull-right">
+            <label>
+                <input type="checkbox" id="with-tasks" /> With Current Tasks
+            </label>
+        </div>
+
+    </div>
+
+</div>
+
 <table class="table table-hover table-with-navbar-dropdown">
     <tr>
-        <th>            
+        <th>
             Site
         </th>
         <th>
@@ -36,59 +45,59 @@
         <th class="text-right">Options</th>
     </tr>
     <tbody>
-    @foreach (var item in Model)
-    {        
-        <tr class="rowlink @string.Format("task-count-{0}", @item.Tasks.Where(t => !t.DateCompleted.HasValue).Count())">
-            <td class="searchable">
-                @Html.DisplayFor(modelItem => item.MasterSite.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @if (item.StaffOnProjects.Any())
-                {
-                    foreach (var staff in item.StaffOnProjects)
+        @foreach (var item in Model)
+        {
+            <tr class="rowlink @string.Format("task-count-{0}", @item.Tasks.Where(t => !t.DateCompleted.HasValue).Count())">
+                <td class="searchable">
+                    @Html.DisplayFor(modelItem => item.MasterSite.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @if (item.StaffOnProjects.Any())
                     {
-                        <span>@Html.ActionLink(staff.Staff.Name, "Details", "Staff", new { id = staff.StaffId }, null)</span>
-                    }
-                }
-            </td>
-            <td>
-                @item.Tasks.Where(t => !t.DateCompleted.HasValue).Count()
-            </td>
-            <td>
-                <div class="btn-group pull-right">
-                    <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                        <span class="glyphicon glyphicon-menu-hamburger"></span>
-                    </button>
-                    <ul class="dropdown-menu" role="menu">
-                        <li>@Html.ActionLink("Add Staff", "Create", "StaffOnProjects", new { id = item.Id }, null)</li>
-                        <li>@Html.ActionLink("Add Task", "Create", "Tasks", new { id = item.Id }, null)</li>
-                        @if (string.IsNullOrEmpty(Request["all"]))
+                        foreach (var staff in item.StaffOnProjects)
                         {
-                            <li>@Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id }, new { @class = "mainlink" })</li>
+                            <span>@Html.ActionLink(staff.Staff.Name, "Details", "Staff", new { id = staff.StaffId }, null)</span>
                         }
-                        else
-                        {
-                            <li>@Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id, all = "true" }, new { @class = "mainlink" })</li>
-                        }   
-                        <li class="divider"></li>
-                        <li>@Html.ActionLink("Edit", "Edit", new { id = item.Id }, null)</li>
-                        <li>@Html.ActionLink("Details", "Details", new { id = item.Id }, null)</li>
-                        <li>@Html.ActionLink("Delete", "Delete", new { id = item.Id }, null)</li>
-                        <li>@Html.ActionLink("Complete", "Complete", "Projects", new { id = item.Id }, null)</li>
-                    </ul>
-                </div>       
-            </td>
-        </tr>
-    }
+                    }
+                </td>
+                <td>
+                    @item.Tasks.Where(t => !t.DateCompleted.HasValue).Count()
+                </td>
+                <td>
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                            <span class="glyphicon glyphicon-menu-hamburger"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>@Html.ActionLink("Add Staff", "Create", "StaffOnProjects", new { id = item.Id }, null)</li>
+                            <li>@Html.ActionLink("Add Task", "Create", "Tasks", new { id = item.Id }, null)</li>
+                            @if (string.IsNullOrEmpty(Request["all"]))
+                            {
+                                <li>@Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id }, new { @class = "mainlink" })</li>
+                            }
+                            else
+                            {
+                                <li>@Html.ActionLink("Project Tasks", "Index", "Tasks", new { id = item.Id, all = "true" }, new { @class = "mainlink" })</li>
+                            }
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Edit", "Edit", new { id = item.Id }, null)</li>
+                            <li>@Html.ActionLink("Details", "Details", new { id = item.Id }, null)</li>
+                            <li>@Html.ActionLink("Delete", "Delete", new { id = item.Id }, null)</li>
+                            <li>@Html.ActionLink("Complete", "Complete", "Projects", new { id = item.Id }, null)</li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 
 
 @section scripts{
-    
+
     <script>
         $(function () {
 

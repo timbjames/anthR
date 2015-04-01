@@ -9,7 +9,7 @@
 
         <div>
             <p>
-                @Html.ActionLink("Create New Master Site", "Create", "MasterSite", null, new { @class = "btn btn-xs btn-primary" })
+                @Html.RawActionLink("<i class=\"glyphicon glyphicon-plus-sign\"></i> Create New Master Site", "Create", "MasterSite", null, new { @class = "btn btn-xs btn-primary" })
             </p>
         </div>
 
@@ -39,8 +39,8 @@
                                     <span class="glyphicon glyphicon-menu-hamburger"></span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li>@Html.ActionLink("Details", "Details", "Todo", new { id = masterSite.MasterSiteId }, null)</li>
-                                    <li>@Html.ActionLink("Edit", "Edit", "Todo", new { id = masterSite.MasterSiteId }, null)</li>                                       
+                                    <li>@Html.ActionLink("Details", "Details", "MasterSite", new { id = masterSite.MasterSiteId }, null)</li>
+                                    <li>@Html.ActionLink("Edit", "Edit", "MasterSite", new { id = masterSite.MasterSiteId }, null)</li>                                       
                                 </ul>
                             </div> 
                         </td>

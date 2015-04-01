@@ -22,11 +22,11 @@ namespace anthR.Web.Controllers
         public async Task<ActionResult> Index(int? id, bool? completed, string all)
         {
             
-            IQueryable<AnthRTask> anthRTask = null;
+            List<AnthRTask> anthRTask = null;
 
             if (!completed.HasValue)
             {
-                anthRTask = _db.AnthRTask.Where(t => !id.HasValue 
+                anthRTask = await _db.AnthRTask.Where(t => !id.HasValue 
                     && !t.DateCompleted.HasValue 
                     && (
                             t.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
@@ -46,11 +46,11 @@ namespace anthR.Web.Controllers
                 .OrderBy(p => p.Priority)
                 .ThenBy(p => p.Deadline)                
                 .ThenBy(p => p.PlannedStart)                
-                .Include(a => a.Project);
+                .Include(a => a.Project).ToListAsync();
             }
             else
             {
-                anthRTask = _db.AnthRTask.Where(t => !id.HasValue && t.DateCompleted.HasValue
+                anthRTask = await _db.AnthRTask.Where(t => !id.HasValue && t.DateCompleted.HasValue
                     && (
                         t.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
                         || 
@@ -69,10 +69,32 @@ namespace anthR.Web.Controllers
                 .OrderBy(p => p.Priority)
                 .ThenBy(p => p.Deadline)                
                 .ThenBy(p => p.PlannedStart)                
-                .Include(a => a.Project);
+                .Include(a => a.Project).ToListAsync();
             }
-
-            return View(await anthRTask.ToListAsync());
+                
+            // if we have a project id, then load project details and assign to breadcrumbextra
+            if (id.HasValue)
+            {
+                
+                Project project = null;
+                if (anthRTask.Count > 0)
+                {
+                    project = anthRTask.FirstOrDefault().Project;
+                }
+                else
+                {
+                    project = await _db.Project.Where(p => p.Id.Equals(id.Value)).FirstOrDefaultAsync();                
+                }
+                                
+                ViewBag.BreadcrumbExtra = string.Format("- {0} - {1}", project.MasterSite.Name, project.Name);              
+                
+            }
+            else
+            {
+                ViewBag.BreadcrumbExtra = "- All Tasks";
+            }
+            
+            return View(anthRTask);
 
         }
 

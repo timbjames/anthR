@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" href="/favicon.ico?v=1"> 
+
     <title>@ViewBag.Title - My ASP.NET Application</title>
 
     @Styles.Render("~/Content/css")
@@ -21,7 +24,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("anthR", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @*@Html.ActionLink("anthR", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+                <a href="/" class="navbar-brand"><img src="~/Content/livery/anthr-logo.png" alt="anthR" /></a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
@@ -43,11 +47,13 @@
         </div>
     </div>
 
+    @Html.Partial("_BreadCrumb")
+    
     <div class="container body-content">
 
         @RenderBody()
 
-        <div id="searchBox" 
+        <div id="searchBox"
              style="position: absolute; top: 62px; width: 1140px; padding: 50px; background-color: rgba(255,255,255,.75); display: none;">
 
             <form>
@@ -56,9 +62,9 @@
                     <input type="text" placeholder="Search..." id="search" class="form-control" style="max-width: none;" />
                 </div>
                 <button type="button" class="btn btn-default" aria-label="Left Align">
-                  <span class="glyphicon glyphicon-remove close-search" aria-hidden="true"></span>
+                    <span class="glyphicon glyphicon-remove close-search" aria-hidden="true"></span>
                 </button>
-        
+
             </form>
 
         </div>
@@ -66,7 +72,7 @@
         <hr />
 
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year - anthR app</p>
         </footer>
 
     </div>
@@ -77,5 +83,8 @@
     @RenderSection("scripts", required: false)
 
 </body>
+
+
+
 
 </html>

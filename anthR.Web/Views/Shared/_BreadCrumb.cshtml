@@ -1,0 +1,29 @@
+﻿@{
+    var _homePage = ViewContext.RouteData.Values["Controller"].ToString().Equals("home", StringComparison.OrdinalIgnoreCase)
+        &&
+        ViewContext.RouteData.Values["Action"].ToString().Equals("index", StringComparison.OrdinalIgnoreCase);
+}
+
+ @if (!_homePage)
+{
+    <div class="row breadcrumb-row">            
+        <div class="col-sm-12">
+            <ol class="breadcrumb">
+                <li><a href="/"><i class="glyphicon glyphicon-home"></i></a></li>
+                @if (ViewContext.RouteData.Values["Controller"].ToString().Equals("tasks", StringComparison.OrdinalIgnoreCase))
+                {
+                    <li>@Html.ActionLink("Projects", "Index", "Projects")</li>
+                }
+                @if (ViewContext.RouteData.Values["Action"].ToString().Equals("index", StringComparison.OrdinalIgnoreCase))
+                {
+                    <li class="active">@ViewContext.RouteData.Values["Controller"].ToString() @ViewBag.BreadcrumbExtra</li>
+                }
+                else
+                {
+                    <li>@Html.ActionLink(ViewContext.RouteData.Values["Controller"].ToString(), "Index", ViewContext.RouteData.Values["Controller"].ToString())</li>
+                    <li class="active">@ViewContext.RouteData.Values["Action"].ToString() @ViewBag.BreadcrumbExtra</li>
+                }
+            </ol>
+        </div>                    
+    </div>
+}

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
 
 namespace anthR.Web
 {
@@ -25,6 +26,24 @@ namespace anthR.Web
             value = string.Join("<br />", value.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Select(HttpUtility.HtmlEncode));
 
             return new HtmlString(value);
+
+        }
+
+        /// <summary>
+        /// Allows RAW html to be placed in the default Html.ActionLink
+        /// </summary>
+        /// <param name="htmlHelper"></param>
+        /// <param name="rawHtml"></param>
+        /// <param name="action"></param>
+        /// <param name="controller"></param>
+        /// <param name="routeValues"></param>
+        /// <param name="htmlAttributes"></param>
+        /// <returns></returns>
+        public static IHtmlString RawActionLink(this HtmlHelper htmlHelper, string rawHtml, string action, string controller, object routeValues, object htmlAttributes){
+
+            string holder = Guid.NewGuid().ToString();
+            string anchor = htmlHelper.ActionLink(holder, action, controller, routeValues, htmlAttributes).ToString();
+            return MvcHtmlString.Create(anchor.Replace(holder, rawHtml));
 
         }
 

@@ -142,6 +142,7 @@
     <Compile Include="Controllers\API\ScheduleController.cs" />
     <Compile Include="Controllers\API\StaffOnTasksController.cs" />
     <Compile Include="Controllers\API\TimesheetController.cs" />
+    <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="Controllers\API\StaffOnProjectsController.cs" />
     <Compile Include="Controllers\StaffOnProjectsController.cs" />
@@ -285,6 +286,9 @@
     <Content Include="Content\bootstrap\bootstrap-theme.css" />
     <Content Include="Content\bootstrap\bootstrap.css" />
     <Content Include="Content\dark_wood.png" />
+    <Content Include="Content\livery\anthr-logo.png" />
+    <Content Include="Content\livery\favicon.ico" />
+    <Content Include="Content\livery\favico.png" />
     <Content Include="Content\slide-bg.png" />
     <Content Include="Content\styles\bootstrap-datetimepicker.css" />
     <Content Include="Content\styles\calendar.css" />
@@ -311,6 +315,33 @@
     <Content Include="fonts\glyphicons\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\din\DIN-Black.otf" />
+    <Content Include="fonts\din\DIN-BlackAlternate.otf" />
+    <Content Include="fonts\din\DIN-Bold.otf" />
+    <Content Include="fonts\din\DIN-BoldAlternate.otf" />
+    <Content Include="fonts\din\DIN-Light.otf" />
+    <Content Include="fonts\din\DIN-LightAlternate.otf" />
+    <Content Include="fonts\din\DIN-Medium.otf" />
+    <Content Include="fonts\din\DIN-MediumAlternate.otf" />
+    <Content Include="fonts\din\DIN-Regular.otf" />
+    <Content Include="fonts\din\DIN-RegularAlternate.otf" />
+    <Content Include="fonts\din\DINBdA.ttf" />
+    <Content Include="fonts\din\DINBdEp.ttf" />
+    <Content Include="fonts\din\DINBd_.ttf" />
+    <Content Include="fonts\din\DINBkA.ttf" />
+    <Content Include="fonts\din\DINBkEp.ttf" />
+    <Content Include="fonts\din\DINBk_.ttf" />
+    <Content Include="fonts\din\DINLiA.ttf" />
+    <Content Include="fonts\din\DINLiEp.ttf" />
+    <Content Include="fonts\din\DINLi_.ttf" />
+    <Content Include="fonts\din\DINMdA.ttf" />
+    <Content Include="fonts\din\DINMdEp.ttf" />
+    <Content Include="fonts\din\DINMd_.ttf" />
+    <Content Include="fonts\din\DINRgA.ttf" />
+    <Content Include="fonts\din\DINRgEp.ttf" />
+    <Content Include="fonts\din\DINRg_.ttf" />
+    <Content Include="Content\livery\favico.psd" />
+    <Content Include="Content\livery\logo.psd" />
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap\bootstrap-multiselect.js" />
@@ -430,6 +461,7 @@
     <Content Include="Views\Shared\_BlankLayout.cshtml" />
     <Content Include="Views\Tasks\CreateAjaxForm.cshtml" />
     <Content Include="Views\Shared\_MonthsDropDown.cshtml" />
+    <Content Include="Views\Shared\_BreadCrumb.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

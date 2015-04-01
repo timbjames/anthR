@@ -200,22 +200,20 @@ namespace anthR.Web.Controllers
             // need to get the staff email from the email id
             var staffEmail = db.Staff.Where(s => s.Id.Equals(email.Value)).FirstOrDefault().Email;
             var myEmail = string.Empty;
-            if (!string.IsNullOrEmpty(me))
-            {
-                // get my email
-                myEmail = db.Staff.Where(s => s.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Email;
-            }
-            
+           
+            // get my email
+            myEmail = db.Staff.Where(s => s.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Email;
+                        
             try
             {
                 
                 mailMessage = new MailMessage();
                 mailMessage.To.Add(staffEmail);
-                if (!string.IsNullOrEmpty(myEmail))
+                if (!string.IsNullOrEmpty(me) && !string.IsNullOrEmpty(myEmail))
                 {
                     mailMessage.Bcc.Add(myEmail);
                 }
-                mailMessage.From = new MailAddress("online@kingfisher-systems.co.uk");
+                mailMessage.From = new MailAddress(myEmail);
                 mailMessage.IsBodyHtml = true;
                 mailMessage.Body = body;
                 mailMessage.Subject = string.Format("{0} Timesheet", startDate.ToString("MMM yyyy"));
