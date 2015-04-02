@@ -1,0 +1,81 @@
+﻿@model IEnumerable<anthR.Web.Models.arTask.Timesheet>
+
+
+
+<div class="row">
+
+    <div class="col-sm-12">
+
+        <table class="table table-hover">
+            <tr>        
+                <th>
+                    User
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Hours)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Mins)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HourlyRate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateRecorded)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quoted)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AlreadyBilled)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HideFromTimesheet)
+                </th>
+                <th></th>
+            </tr>
+    
+        @foreach (var item in Model) {
+            <tr>        
+                <td>
+                    @item.Staff.Username.Replace("KFS\\", "")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Hours)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Mins)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HourlyRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateRecorded)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quoted)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AlreadyBilled)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HideFromTimesheet)
+                </td>
+                <td>
+                    <div class="btn-group pull-right">
+                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                            <span class="glyphicon glyphicon-menu-hamburger"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>@Html.ActionLink("Edit", "Edit", new { controller = "Timesheets", id = item.Id })</li>
+                            <li>@Html.ActionLink("Delete", "Delete", new { controller = "Timesheets", id = item.Id })</li>  
+                        </ul>
+                    </div> 
+                </td>
+            </tr>
+        }
+        </table>
+
+    </div>
+
+</div>

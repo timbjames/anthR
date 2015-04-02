@@ -106,9 +106,14 @@
                                                         <li class="@(timesheet.HideFromTimesheet.HasValue ? timesheet.HideFromTimesheet.Value ? "hide-me" : "" : "")">
                                                             @if (timesheet.Quoted.Equals(0) && timesheet.AnthRTask.Project.Quoted.Equals(0))
                                                             {
-                                                                <span title="@timesheet.Id">@timesheet.Hours hours @@ @timesheet.HourlyRate.ToString("C")</span>
+                                                                <span title="@timesheet.Id">@timesheet.Hours hours@(timesheet.Mins > 0 ? " " + timesheet.Mins + " mins" : "") @@ @timesheet.HourlyRate.ToString("C")</span>
                                                                 totalHours += timesheet.Hours;
                                                                 totalIncome += (timesheet.Hours * timesheet.HourlyRate);
+                                                                // calculate mins and add on
+                                                                if (timesheet.Mins > 0)
+                                                                {
+                                                                    totalIncome += Convert.ToInt32(Math.Ceiling((Convert.ToDecimal(timesheet.HourlyRate) / (60 / timesheet.Mins))));                                                                    
+                                                                }                                                                
                                                             }
                                                             else if (timesheet.AnthRTask.Project.Quoted.Equals(0))
                                                             {
@@ -117,8 +122,8 @@
                                                             }
                                                             else
                                                             {
-                                                                <span title="@timesheet.Id">@timesheet.Hours hours</span>
-                                                                totalHours += timesheet.Hours;
+                                                                <span title="@timesheet.Id">@timesheet.Hours hours@(timesheet.Mins > 0 ? " " + timesheet.Mins + " mins" : "")</span>
+                                                                totalHours += timesheet.Hours + timesheet.Mins;
                                                             }
                                                             @*<a href="/Timesheets/Delete/@timesheet.Id" class="btn btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>*@
                                                             <a href="/Timesheets/Edit/@timesheet.Id" class="btn btn-xs" title="Edit Timesheet Entry"><i class="glyphicon glyphicon-pencil"></i></a>
@@ -127,6 +132,8 @@
                                                     }
                                                 }
                                             </ul>
+
+
 
                                         </li>
                                     }

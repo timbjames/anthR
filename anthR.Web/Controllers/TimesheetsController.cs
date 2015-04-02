@@ -15,12 +15,13 @@ namespace anthR.Web.Controllers
 {
     public class TimesheetsController : Controller
     {
-        private anthRContext db = new anthRContext();
+       
+        private anthRContext _db = new anthRContext();
 
         // GET: Timesheets
         public async Task<ActionResult> Index()
         {
-            var timesheets = db.Timesheets.Where(t => t.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Include(t => t.AnthRTask).Include(t => t.Staff);
+            var timesheets = _db.Timesheets.Where(t => t.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Include(t => t.AnthRTask).Include(t => t.Staff);
             return View(await timesheets.ToListAsync());
         }
 
@@ -31,7 +32,7 @@ namespace anthR.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Timesheet timesheet = await db.Timesheets.FindAsync(id);
+            Timesheet timesheet = await _db.Timesheets.FindAsync(id);
             if (timesheet == null)
             {
                 return HttpNotFound();
@@ -44,10 +45,10 @@ namespace anthR.Web.Controllers
         {
             
             // load up task if id is not empty
-            var tasks = db.AnthRTask.Where(t => !id.HasValue || t.Id.Equals(id.Value)).ToList();
+            var tasks = _db.AnthRTask.Where(t => !id.HasValue || t.Id.Equals(id.Value)).ToList();
             //tasks.ForEach(t => { t.Name = t.Project.MasterSite.Name + " - " + t.Project.Name + " - " + t.Name; });
             // load staff on task
-            var staff = db.Staff.Where(s => s.StaffOnTasks.Where(t => !id.HasValue || t.AnthRTaskId.Equals(id.Value)).Any());
+            var staff = _db.Staff.Where(s => s.StaffOnTasks.Where(t => !id.HasValue || t.AnthRTaskId.Equals(id.Value)).Any());
             
             // need to load up the staff id for current username
             if (!staffId.HasValue)
@@ -68,19 +69,29 @@ namespace anthR.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,Hours,Mins,HourlyRate,StaffId,AnthRTaskId,DateRecorded,Quoted,AlreadyBilled")] Timesheet timesheet)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Hours,Mins,HourlyRate,StaffId,AnthRTaskId,DateRecorded,Quoted,AlreadyBilled")] Timesheet timesheet, bool? CompleteTask)
         {
             if (ModelState.IsValid)
             {
 
                 // add the username                
-                db.Timesheets.Add(timesheet);
-                await db.SaveChangesAsync();
+                _db.Timesheets.Add(timesheet);
+
+                // if CompleteTask is set and true, then complete the task at this point
+                if (CompleteTask.HasValue && CompleteTask.Value)
+                {
+                    var anthrTask = _db.AnthRTask.Where(at => at.Id.Equals(timesheet.AnthRTaskId)).FirstOrDefault();
+                    anthrTask.DateCompleted = DateTime.Now;
+                    anthrTask.StatusId = _db.Status.Where(s => s.Description.Equals("Complete")).FirstOrDefault().Id;
+                }
+
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Index", "Tasks");
+
             }
 
-            ViewBag.AnthRTaskId = new SelectList(db.AnthRTask, "Id", "Name", timesheet.AnthRTaskId);
-            ViewBag.StaffId = new SelectList(db.Staff, "Id", "Name", timesheet.StaffId);
+            ViewBag.AnthRTaskId = new SelectList(_db.AnthRTask, "Id", "Name", timesheet.AnthRTaskId);
+            ViewBag.StaffId = new SelectList(_db.Staff, "Id", "Name", timesheet.StaffId);
             return View(timesheet);
         }
 
@@ -91,13 +102,13 @@ namespace anthR.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Timesheet timesheet = await db.Timesheets.FindAsync(id);
+            Timesheet timesheet = await _db.Timesheets.FindAsync(id);
             if (timesheet == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.AnthRTaskId = new SelectList(db.AnthRTask, "Id", "Name", timesheet.AnthRTaskId);
-            ViewBag.StaffId = new SelectList(db.Staff, "Id", "Name", timesheet.StaffId);
+            ViewBag.AnthRTaskId = new SelectList(_db.AnthRTask, "Id", "Name", timesheet.AnthRTaskId);
+            ViewBag.StaffId = new SelectList(_db.Staff, "Id", "Name", timesheet.StaffId);
             return View(timesheet);
         }
 
@@ -110,12 +121,12 @@ namespace anthR.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(timesheet).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+                _db.Entry(timesheet).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
                 return RedirectToAction("Show", new { month = DateTime.Now.Month });
             }
-            ViewBag.AnthRTaskId = new SelectList(db.AnthRTask, "Id", "Name", timesheet.AnthRTaskId);
-            ViewBag.StaffId = new SelectList(db.Staff, "Id", "Name", timesheet.StaffId);
+            ViewBag.AnthRTaskId = new SelectList(_db.AnthRTask, "Id", "Name", timesheet.AnthRTaskId);
+            ViewBag.StaffId = new SelectList(_db.Staff, "Id", "Name", timesheet.StaffId);
             return View(timesheet);
         }
 
@@ -126,7 +137,7 @@ namespace anthR.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Timesheet timesheet = await db.Timesheets.FindAsync(id);
+            Timesheet timesheet = await _db.Timesheets.FindAsync(id);
             if (timesheet == null)
             {
                 return HttpNotFound();
@@ -139,9 +150,9 @@ namespace anthR.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Timesheet timesheet = await db.Timesheets.FindAsync(id);
-            db.Timesheets.Remove(timesheet);
-            await db.SaveChangesAsync();
+            Timesheet timesheet = await _db.Timesheets.FindAsync(id);
+            _db.Timesheets.Remove(timesheet);
+            await _db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -159,13 +170,13 @@ namespace anthR.Web.Controllers
             int daysInMonth = DateTime.DaysInMonth(DateTime.UtcNow.Year, month.Value);
             DateTime startDate = new DateTime(DateTime.Now.Year, month.Value, 1);
             DateTime endDate = new DateTime(DateTime.Now.Year, month.Value, daysInMonth);
-            masterSites = db.MasterSite
+            masterSites = _db.MasterSite
                 .Where(ms => ms.Projects
                     .Where(p => p.Tasks
                         .Where(t => t.Timesheet.Where(ts => ts.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
                             && ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()).Any());
                         
-            ViewBag.StaffId = new SelectList(db.Staff.ToList(), "Id", "Name");
+            ViewBag.StaffId = new SelectList(_db.Staff.ToList(), "Id", "Name");
 
             return View(await masterSites.ToListAsync());            
 
@@ -185,7 +196,7 @@ namespace anthR.Web.Controllers
             int daysInMonth = DateTime.DaysInMonth(DateTime.UtcNow.Year, month.Value);
             DateTime startDate = new DateTime(DateTime.Now.Year, month.Value, 1);
             DateTime endDate = new DateTime(DateTime.Now.Year, month.Value, daysInMonth);
-            masterSites = db.MasterSite
+            masterSites = _db.MasterSite
                 .Where(ms => ms.Projects
                     .Where(p => p.Tasks
                         .Where(t => t.Timesheet.Where(ts => ts.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) &&
@@ -198,11 +209,11 @@ namespace anthR.Web.Controllers
             SmtpClient smtpClient = null;
 
             // need to get the staff email from the email id
-            var staffEmail = db.Staff.Where(s => s.Id.Equals(email.Value)).FirstOrDefault().Email;
+            var staffEmail = _db.Staff.Where(s => s.Id.Equals(email.Value)).FirstOrDefault().Email;
             var myEmail = string.Empty;
            
             // get my email
-            myEmail = db.Staff.Where(s => s.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Email;
+            myEmail = _db.Staff.Where(s => s.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Email;
                         
             try
             {
@@ -239,9 +250,10 @@ namespace anthR.Web.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
+   
     }
 }

@@ -251,7 +251,7 @@ namespace anthR.Web.Controllers
             ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description", anthRTask.StatusId);
             return View(anthRTask);
 
-        }
+        }        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -270,6 +270,57 @@ namespace anthR.Web.Controllers
 
             ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description", anthRTask.StatusId);
             return View(anthRTask);
+        }
+
+        public async Task<ActionResult> CompleteAjaxTask(int id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AnthRTask anthRTask = await _db.AnthRTask.FindAsync(id);
+            if (anthRTask == null)
+            {
+                return HttpNotFound();
+            }
+            
+            ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description", anthRTask.StatusId);
+            return View(anthRTask);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> CompleteAjaxTask([Bind(Include = "Id")] AnthRTask anthRTask)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                var task = _db.AnthRTask.SingleOrDefault(t => t.Id.Equals(anthRTask.Id));
+                
+                task.DateCompleted = DateTime.Now;
+                task.StatusId = _db.Status.Where(s => s.Description.Equals("Complete")).FirstOrDefault().Id;
+                
+                await _db.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.StatusId = new SelectList(_db.Status, "Id", "Description", anthRTask.StatusId);
+            return View(anthRTask);
+
+        }
+                
+        /// <summary>
+        /// Shows time allocated to a specific task
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> TimeAllocated(int id)
+        {
+
+            IQueryable<Timesheet> timesheet = _db.Timesheets.Where(ts => ts.AnthRTaskId.Equals(id));
+
+            return View(await timesheet.ToListAsync());
+
         }
 
         protected override void Dispose(bool disposing)

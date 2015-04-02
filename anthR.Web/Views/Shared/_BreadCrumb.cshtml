@@ -21,7 +21,7 @@
                 else
                 {
                     <li>@Html.ActionLink(ViewContext.RouteData.Values["Controller"].ToString(), "Index", ViewContext.RouteData.Values["Controller"].ToString())</li>
-                    <li class="active">@ViewContext.RouteData.Values["Action"].ToString() @ViewBag.BreadcrumbExtra</li>
+                    <li class="active">@System.Text.RegularExpressions.Regex.Replace(ViewContext.RouteData.Values["Action"].ToString(), "(\\B[A-Z])", " $1") @ViewBag.BreadcrumbExtra</li>
                 }
             </ol>
         </div>                    

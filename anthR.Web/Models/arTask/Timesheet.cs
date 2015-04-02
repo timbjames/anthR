@@ -21,6 +21,7 @@ namespace anthR.Web.Models.arTask
         [Display(Name = "Date Recorded")]
         public DateTime? DateRecorded { get; set; }
 
+        [DisplayFormat(DataFormatString="{0:C}")]
         public double Quoted { get; set; }
 
         public bool AlreadyBilled { get; set; }

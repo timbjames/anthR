@@ -80,8 +80,25 @@ body {
     width: 100px;
 }
 
+    .navbar-inverse .navbar-brand:hover {
+        color: #337ab7;
+        text-align: center;
+    }
+
     .navbar-brand img {
         width: 100%;
+    }
+
+    .navbar-brand i {
+        display: none;
+    }
+
+    .navbar-brand:hover img {
+        display: none;
+    }
+
+    .navbar-brand:hover i {
+        display: block;
     }
 
 .navbar-text.navbar-right {

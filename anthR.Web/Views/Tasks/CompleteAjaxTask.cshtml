@@ -1,0 +1,37 @@
+﻿@model anthR.Web.Models.arTask.AnthRTask
+
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <h4>Complete Task</h4>
+
+        <hr />
+        <div class="col-sm-12">
+            <p>
+                Are you sure you want to set the status of the following task to Complete?
+                <br /><br />
+                @Model.Project.MasterSite.Name - @Model.Project.Name
+                <br />
+                @Model.Name
+                <br />
+                @Model.Description
+                <br /><br />
+            </p>
+        </div>
+        
+        <div class="form-group">
+            <div class="col-md-10">
+                <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-floppy-disk"></i> Complete</button>                
+                <button type="button" class="btn btn-primary close-modal"><i class="glyphicon glyphicon-remove"></i> Cancel</button>                
+            </div>
+        </div>
+
+    </div>
+}

@@ -121,11 +121,12 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li>@Html.ActionLink("Add Staff", "Create", "StaffOnTasks", new { id = item.ProjectId, taskId = item.Id }, null)</li>
                                 <li>@Html.ActionLink("Allocate Time", "Create", "Timesheets", new { id = item.Id }, null) </li>                                    
+                                <li>@Html.RawActionLink(string.Format("Time Allocated{0}", item.Timesheet.Any() ? string.Format(" ({0})", item.Timesheet.Count()) : ""), "TimeAllocated", "Tasks", new { id = item.Id }, null) </li>                                    
                                 <li class="divider"></li>
                                 <li>@Html.ActionLink("Edit", "Edit", "Tasks", new { id = item.Id }, null)</li>
                                 <li>@Html.ActionLink("Details", "Details", "Tasks", new { id = item.Id }, null)</li>
                                 <li>@Html.ActionLink("Delete", "Delete", "Tasks", new { id = item.Id }, null)</li>
-                                <li>@Html.ActionLink("Complete", "CompleteTask", "Tasks", new { id = item.Id }, null)</li>
+                                <li>@Html.ActionLink("Complete", "CompleteTask", "Tasks", new { id = item.Id }, new { @class = "task-complete", data_id = item.Id })</li>
                             </ul>
                         </div>                                             
                     </td>
@@ -173,8 +174,10 @@
 
             // handle Ctrl + S
             $(document).on('keydown', function (e) { handleShortcuts(e); });
-            $(document).on('click', '.close-search', function () {
+            $(document).on('click', '.close-search, .close-modal', function () {
                 closeSearch();
+                // kill modals
+                $('.modal').remove();
             });
             var handleShortcuts = function (e) {
 
@@ -188,7 +191,10 @@
 
                 // escape key
                 if (e.keyCode == 27) {
+                    // close search
                     closeSearch();
+                    // kill modals
+                    $('.modal').remove();
                 }
 
                 // Ctrl + C
@@ -235,6 +241,21 @@
                 });
 
             };
+
+            // quick complete
+            $(document).on('click', '.task-complete', function (e) {
+
+                e.preventDefault();
+
+                // show complete modal
+                var $modal = $('<div />').addClass('modal').addClass('show');
+                var $modalInner = $('<div />').addClass('modal-inner');
+                $.get('/tasks/completeajaxtask', {id: $(this).data('id')}, function (data) {
+                    $modalInner.append(data);
+                    $('body').append($modal.append($modalInner));
+                });
+
+            });
 
         });
     </script>
