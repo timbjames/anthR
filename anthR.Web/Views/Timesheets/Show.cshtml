@@ -19,7 +19,7 @@
 
 @if (!string.IsNullOrEmpty(Request["email"])){
     <style>            
-        .email .hide-me{
+        .email .hide-me, .email .hide-site{
             display: none;
         }
     </style>
@@ -67,15 +67,24 @@
         totalQuoted = 0;
 
         var hasVat = item.HasVAT;
+        bool hideSite = false;
+        string hideClass = string.Empty;
+        int hiddenProjectCount = item.Projects.Where(p => p.HideFromTimesheet.HasValue && p.HideFromTimesheet.Value && p.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate && ts.Staff.Username.Equals(User.Identity.Name)).Any()).Any()).Count();
+        int projectCount = item.Projects.Where(p => p.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate && ts.Staff.Username.Equals(User.Identity.Name)).Any()).Any()).Count();       
+        if (hiddenProjectCount == projectCount)
+        {
+            hideClass = "hide-site";
+        }
 
-                <li style="margin-top: 10px; border-top: solid 1px #999;">
-                    <h4>@item.Name</h4>
-                    <ul>
-                        @if (item.Projects.Any())
+        <li style="margin-top: 10px; border-top: solid 1px #999;" class="site @hideClass" 
+            data-projectcount="@projectCount" data-hiddenprojectcount="@hiddenProjectCount">
+            <h4>@item.Name</h4>
+            <ul>
+                @if (item.Projects.Any())
                 {
                     foreach (var project in item.Projects.Where(p => p.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate && ts.Staff.Username.Equals(User.Identity.Name)).Any()).Any()))
                     {
-                        <li style="border: none;" class="@(project.HideFromTimesheet.HasValue ? project.HideFromTimesheet.Value ? "hide-me" : "" : "")">
+                        <li style="border: none;" class="@(project.HideFromTimesheet.HasValue ? project.HideFromTimesheet.Value ? "project hide-me" : "project" : "project")">
                             @project.Name <a href="#" data-type="1" data-id="@project.Id" data-hidden="@project.HideFromTimesheet" class="hide-me" title="Hide Project from email"><i class="glyphicon @(project.HideFromTimesheet.HasValue ? project.HideFromTimesheet.Value ? "glyphicon-eye-close" : "glyphicon-eye-open" : "glyphicon-eye-open")"></i></a>
                             @if (project.Quoted > 0)
                             {
@@ -112,8 +121,8 @@
                                                                 // calculate mins and add on
                                                                 if (timesheet.Mins > 0)
                                                                 {
-                                                                    totalIncome += Convert.ToInt32(Math.Ceiling((Convert.ToDecimal(timesheet.HourlyRate) / (60 / timesheet.Mins))));                                                                    
-                                                                }                                                                
+                                                                    totalIncome += Convert.ToInt32(Math.Ceiling((Convert.ToDecimal(timesheet.HourlyRate) / (60 / timesheet.Mins))));
+                                                                }
                                                             }
                                                             else if (timesheet.AnthRTask.Project.Quoted.Equals(0))
                                                             {
@@ -142,9 +151,9 @@
                         </li>
                     }
                 }
-                
+
             </ul>
-                    
+
             <br />
             <i>
                 <strong>Total Hours: @totalHours</strong> /
@@ -155,15 +164,15 @@
 
         </li>
 
-        total += totalQuoted + Convert.ToDouble(totalIncome);
+                total += totalQuoted + Convert.ToDouble(totalIncome);
 
     }
 
-        </ul>
+</ul>
 
-        <h4 style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #999;" class="text-right">
-            Overall Total: @total.ToString("C")
-        </h4>
+<h4 style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #999;" class="text-right">
+    Overall Total: @total.ToString("C")
+</h4>
 
         @section scripts{
 
@@ -195,6 +204,7 @@
                     $(document).on('click', '.hide-me', function (e) {
 
                         e.preventDefault();
+                        e.stopPropagation();
                                                 
                         var $this = $(this);
 
@@ -223,6 +233,11 @@
                                             $this.children('i').removeClass('glyphicon-eye-open').addClass('glyphicon-eye-close');
                                             $this.data('hidden', 'true');
                                             $this.parent('li').addClass('hide-me');
+
+                                            if ($this.parent('li').hasClass('project')) {
+                                                $this.parents('.site').data('hiddenprojectcount', $this.parents('.site').data('hiddenprojectcount') + 1);
+                                            }                                            
+
                                             break;
                                         case "true":
                                             // remove glyphicon-eye-close
@@ -230,9 +245,24 @@
                                             $this.children('i').removeClass('glyphicon-eye-close').addClass('glyphicon-eye-open');
                                             $this.data('hidden', 'false');
                                             $this.parent('li').removeClass('hide-me');
+
+                                            if ($this.parent('li').hasClass('project')) {
+                                                $this.parents('.site').data('hiddenprojectcount', $this.parents('.site').data('hiddenprojectcount') - 1);
+                                            }
+
                                             break;
                                     }
 
+                            }
+
+                            var projectCount = $this.parents('.site').data('projectcount');
+                            var projectHiddenCount = $this.parents('.site').data('hiddenprojectcount');
+                            if (projectCount == projectHiddenCount) {
+                                // hidden project count is the same as project count. so hide site
+                                $this.parents('.site').addClass('hide-site');
+                            }
+                            else {
+                                $this.parents('.site').removeClass('hide-site');
                             }
 
                         });

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "anthR.Web.Tests", "anthR.We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "anthR.Utils", "anthR.Utils\anthR.Utils.csproj", "{019DC303-E61E-4E91-B4B5-6CA03C1FDC63}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "anthR.Hub", "anthR.Hub\anthR.Hub.csproj", "{09CFF202-F71C-44B4-A5F4-519FAFABC2D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,11 +31,16 @@ Global
 		{019DC303-E61E-4E91-B4B5-6CA03C1FDC63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{019DC303-E61E-4E91-B4B5-6CA03C1FDC63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{019DC303-E61E-4E91-B4B5-6CA03C1FDC63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09CFF202-F71C-44B4-A5F4-519FAFABC2D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09CFF202-F71C-44B4-A5F4-519FAFABC2D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09CFF202-F71C-44B4-A5F4-519FAFABC2D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09CFF202-F71C-44B4-A5F4-519FAFABC2D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{019DC303-E61E-4E91-B4B5-6CA03C1FDC63} = {0955808C-A9B9-43F2-BB38-5B940125698E}
+		{09CFF202-F71C-44B4-A5F4-519FAFABC2D9} = {0955808C-A9B9-43F2-BB38-5B940125698E}
 	EndGlobalSection
 EndGlobal

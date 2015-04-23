@@ -1,0 +1,41 @@
+﻿ul#notifiR{
+    position: fixed;
+    bottom: 10px;
+    right: 30px;    
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    z-index: 998;
+}
+    ul#notifiR li{
+        padding: 5px;
+        margin-bottom: 2px;
+        border-radius: 5px;
+        /*border: 1px solid #fff;*/
+        border: none;
+    }
+
+        ul#notifiR li.nfr-n{
+            background-color: #cccc66;
+            color: #fff;
+        }
+
+        ul#notifiR li.nfr-i{
+            background-color: #7cbcd7;
+            color: #fff;
+        }
+
+        ul#notifiR li.nfr-w{
+            background-color: #d16868;
+            color: #fff;
+        }
+
+        ul#notifiR li.nfr-a{
+            background-color: #d16868;
+            color: #fff;
+        }
+
+        ul#notifiR li.nfr-e{
+            background-color: #d16868;
+            color: #fff;
+        }

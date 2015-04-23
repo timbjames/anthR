@@ -75,7 +75,9 @@
                         case 200:
                             // everything is fine and dandy!
                             // change window to the task view
-                            window.location = '/projects/index';
+                            var projectId = @ViewBag.ProjectId;
+                            //window.location = '/projects/index';
+                            window.location = '/tasks/index/' + projectId;
                     }
 
                     //console.log('data', data);

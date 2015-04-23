@@ -47,6 +47,7 @@ namespace anthR.Web.Controllers
 
             ViewBag.AnthRTask = new SelectList(db.AnthRTask, "Id", "Name", (taskId.HasValue ? taskId.Value : 0));
             ViewBag.StaffId = new SelectList(staff.ToList(), "Id", "Name");
+            ViewBag.ProjectId = id;
 
             return View();
 

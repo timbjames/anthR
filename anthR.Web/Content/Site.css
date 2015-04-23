@@ -18,8 +18,20 @@ body {
     font-family: 'DIN Medium';
 }
 
+/*https://jumpstartthemes.com/demo/v/2.0/templates/admin/*/
+
     body.background-dark {
+        /*background-image: url(http://subtlepatterns.com/patterns/bgnoise_lg.png);*/
+        /*background-color: rgba(102,105,104,0.9);
+        background-image: radial-gradient(farthest-side ellipse at 10% 0, rgba(102,105,104,0.9),rgba(93,112,119,0.89),rgba(160,174,150,0.9));
+        background-image: -webkit-radial-gradient(10% 0, farthest-side ellipse, rgba(102,105,104,0.9), rgba(93,112,119,0.89), rgba(160,174,150,0.9));
+        background-image: -moz-radial-gradient(10% 0, farthest-side ellipse, rgba(102,105,104,0.9), rgba(93,112,119,0.89), rgba(160,174,150,0.9));*/
     }
+
+section, article{
+    padding: 10px;
+    background-color: rgba(119, 119, 119, .2);   
+}    
 
 .negative-text {
     text-indent: -10000px;
@@ -82,7 +94,7 @@ body {
 
     .navbar-inverse .navbar-brand:hover {
         color: #337ab7;
-        text-align: center;
+        text-align: center;       
     }
 
     .navbar-brand img {
@@ -109,6 +121,11 @@ body {
     margin-top: 10px;
     margin-bottom: 10px;
     color: #fff;
+}
+
+.navbar-inverse .navbar-nav>li>a.active{
+    color: #fff;
+    border-bottom: 1px solid red;
 }
 
 img.gravatar {
@@ -231,9 +248,13 @@ caption {
         color: #fff;
     }
 
-li.hide-me {
+li.hide-me, li.hide-site {
     background-color: #fff;
     opacity: .4;
+}
+
+li.hide-site li.hide-me{
+    opacity: 1;
 }
 
     li.hide-me li i.glyphicon-eye-open, li.hide-me li i.glyphicon-eye-close {

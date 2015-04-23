@@ -11,8 +11,10 @@ using anthR.Web.Models.Core;
 
 namespace anthR.Web.Controllers
 {
+    
     public class ProjectsController : Controller
     {
+        
         private anthRContext db = new anthRContext();
 
         // GET: Projects

@@ -17,8 +17,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -45,10 +45,37 @@
     <Reference Include="EntityFramework.SqlServer">
       <HintPath>..\packages\EntityFramework.6.1.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.0\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -139,6 +166,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\API\ScheduleController.cs" />
     <Compile Include="Controllers\API\StaffOnTasksController.cs" />
     <Compile Include="Controllers\API\TimesheetController.cs" />
@@ -259,6 +287,10 @@
     <Compile Include="Migrations\201503261225371_hidefromtimesheet_2.Designer.cs">
       <DependentUpon>201503261225371_hidefromtimesheet_2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504231124383_user_password.cs" />
+    <Compile Include="Migrations\201504231124383_user_password.Designer.cs">
+      <DependentUpon>201504231124383_user_password.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\arTask\Schedule.cs" />
     <Compile Include="Models\Core\anthRContext.cs" />
@@ -278,9 +310,13 @@
     <Compile Include="Models\Todo\TodoEditItemModel.cs" />
     <Compile Include="Models\Todo\TodoItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="Startup1.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\AppCss\bootstrap\bootstrap-multiselect.css" />
+    <Content Include="Content\AppCss\notifyr\notifyR.css" />
     <Content Include="Content\application.min.css" />
     <Content Include="Content\AppCss\react-email\email.css" />
     <Content Include="Content\bootstrap\bootstrap-theme.css" />
@@ -289,6 +325,7 @@
     <Content Include="Content\livery\anthr-logo.png" />
     <Content Include="Content\livery\favicon.ico" />
     <Content Include="Content\livery\favico.png" />
+    <Content Include="Content\livery\icon_64.png" />
     <Content Include="Content\slide-bg.png" />
     <Content Include="Content\styles\bootstrap-datetimepicker.css" />
     <Content Include="Content\styles\calendar.css" />
@@ -342,6 +379,7 @@
     <Content Include="fonts\din\DINRg_.ttf" />
     <Content Include="Content\livery\favico.psd" />
     <Content Include="Content\livery\logo.psd" />
+    <None Include="Properties\PublishProfiles\Azure Debug.pubxml" />
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap\bootstrap-multiselect.js" />
@@ -350,12 +388,17 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.0.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment.js" />
+    <Content Include="Scripts\myLibs\app.js" />
+    <Content Include="Scripts\myLibs\HubGenerator.js" />
+    <Content Include="Scripts\myLibs\notifyR.js" />
     <Content Include="Scripts\react\JSXTransformer-0.13.0.js" />
     <Content Include="Scripts\react\react-0.13.0-with-addons.js" />
     <Content Include="Scripts\react\react-0.13.0-with-addons.min.js" />
@@ -463,6 +506,9 @@
     <Content Include="Views\Shared\_BreadCrumb.cshtml" />
     <Content Include="Views\Tasks\TimeAllocated.cshtml" />
     <Content Include="Views\Tasks\CompleteAjaxTask.cshtml" />
+    <Content Include="Views\MasterSite\Edit.cshtml" />
+    <Content Include="Views\MasterSite\Details.cshtml" />
+    <Content Include="Views\Account\LogOn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -551,8 +597,15 @@
     <EmbeddedResource Include="Migrations\201503261225371_hidefromtimesheet_2.resx">
       <DependentUpon>201503261225371_hidefromtimesheet_2.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504231124383_user_password.resx">
+      <DependentUpon>201504231124383_user_password.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\anthR.Hub\anthR.Hub.csproj">
+      <Project>{09cff202-f71c-44b4-a5f4-519fafabc2d9}</Project>
+      <Name>anthR.Hub</Name>
+    </ProjectReference>
     <ProjectReference Include="..\anthR.Utils\anthR.Utils.csproj">
       <Project>{019dc303-e61e-4e91-b4b5-6ca03c1fdc63}</Project>
       <Name>anthR.Utils</Name>
@@ -575,7 +628,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>40992</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

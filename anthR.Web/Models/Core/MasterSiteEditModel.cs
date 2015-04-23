@@ -10,6 +10,7 @@ namespace anthR.Web.Models.Core
     {
         public int MasterSiteId { get; set; }
         public string Name { get; set; }
+        public bool HasVAT { get; set; }
         public int LiveBidMasterSiteId { get; set; }
     }
 }
