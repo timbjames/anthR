@@ -169,7 +169,13 @@ namespace anthR.Web.Controllers
             
             int daysInMonth = DateTime.DaysInMonth(DateTime.UtcNow.Year, month.Value);
             DateTime startDate = new DateTime(DateTime.Now.Year, month.Value, 1);
-            DateTime endDate = new DateTime(DateTime.Now.Year, month.Value, daysInMonth);
+            DateTime endDate = new DateTime(DateTime.Now.Year, month.Value, daysInMonth, 23,59,59);
+            var q = _db.MasterSite
+                .Where(ms => ms.Projects
+                    .Where(p => p.Tasks
+                        .Where(t => t.Timesheet.Where(ts => ts.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)
+                            && ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()).Any());
+
             masterSites = _db.MasterSite
                 .Where(ms => ms.Projects
                     .Where(p => p.Tasks
@@ -195,7 +201,7 @@ namespace anthR.Web.Controllers
             
             int daysInMonth = DateTime.DaysInMonth(DateTime.UtcNow.Year, month.Value);
             DateTime startDate = new DateTime(DateTime.Now.Year, month.Value, 1);
-            DateTime endDate = new DateTime(DateTime.Now.Year, month.Value, daysInMonth);
+            DateTime endDate = new DateTime(DateTime.Now.Year, month.Value, daysInMonth, 23, 59, 59);
             masterSites = _db.MasterSite
                 .Where(ms => ms.Projects
                     .Where(p => p.Tasks
