@@ -229,7 +229,11 @@ _Pvt_Extensions/
 
 ###### AnthR Specific ignores (Items omitted from GitHub/VisualStudio.gitignore)
 
-# Visual Studio 2015 CTP - Settings file
+# Development specific configuration files
+ConnectionStrings.config
+PrivateSettings.config
+
+# Visual Studio 2015 CTP - Settings file (changed to .vs at VS 2015 RTM)
 *.ide/
 
 # Others
