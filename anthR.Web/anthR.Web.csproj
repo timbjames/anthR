@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -379,6 +380,8 @@
     <Content Include="fonts\din\DINRg_.ttf" />
     <Content Include="Content\livery\favico.psd" />
     <Content Include="Content\livery\logo.psd" />
+    <Content Include="ConnectionStrings.config" />
+    <Content Include="PrivateSettings.config" />
     <None Include="Properties\PublishProfiles\Azure Debug.pubxml" />
     <None Include="Properties\PublishProfiles\Debug.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
