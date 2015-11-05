@@ -5,7 +5,9 @@
     {
         Layout = null;        
     }
+    decimal displayTotalHours = 0;
     int totalHours = 0;
+    int totalMins = 0;
     int totalIncome = 0;
     double totalQuoted = 0;
     double total = 0;
@@ -63,6 +65,7 @@
     {
 
         totalHours = 0;
+        totalMins = 0;
         totalIncome = 0;
         totalQuoted = 0;
 
@@ -70,13 +73,13 @@
         bool hideSite = false;
         string hideClass = string.Empty;
         int hiddenProjectCount = item.Projects.Where(p => p.HideFromTimesheet.HasValue && p.HideFromTimesheet.Value && p.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate && ts.Staff.Username.Equals(User.Identity.Name)).Any()).Any()).Count();
-        int projectCount = item.Projects.Where(p => p.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate && ts.Staff.Username.Equals(User.Identity.Name)).Any()).Any()).Count();       
+        int projectCount = item.Projects.Where(p => p.Tasks.Where(t => t.Timesheet.Where(ts => ts.DateRecorded >= startDate && ts.DateRecorded <= endDate && ts.Staff.Username.Equals(User.Identity.Name)).Any()).Any()).Count();
         if (hiddenProjectCount == projectCount)
         {
             hideClass = "hide-site";
         }
 
-        <li style="margin-top: 10px; border-top: solid 1px #999;" class="site @hideClass" 
+        <li style="margin-top: 10px; border-top: solid 1px #999;" class="site @hideClass"
             data-projectcount="@projectCount" data-hiddenprojectcount="@hiddenProjectCount">
             <h4>@item.Name</h4>
             <ul>
@@ -117,6 +120,7 @@
                                                             {
                                                                 <span title="@timesheet.Id">@timesheet.Hours hours@(timesheet.Mins > 0 ? " " + timesheet.Mins + " mins" : "") @@ @timesheet.HourlyRate.ToString("C")</span>
                                                                 totalHours += timesheet.Hours;
+                                                                totalMins += timesheet.Mins;
                                                                 totalIncome += (timesheet.Hours * timesheet.HourlyRate);
                                                                 // calculate mins and add on
                                                                 if (timesheet.Mins > 0)
@@ -132,7 +136,9 @@
                                                             else
                                                             {
                                                                 <span title="@timesheet.Id">@timesheet.Hours hours@(timesheet.Mins > 0 ? " " + timesheet.Mins + " mins" : "")</span>
-                                                                totalHours += timesheet.Hours + timesheet.Mins;
+                                                                //totalHours += timesheet.Hours + timesheet.Mins;
+                                                                totalHours += timesheet.Hours;
+                                                                totalMins += timesheet.Mins;
                                                             }
                                                             @*<a href="/Timesheets/Delete/@timesheet.Id" class="btn btn-xs"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>*@
                                                             <a href="/Timesheets/Edit/@timesheet.Id" class="btn btn-xs" title="Edit Timesheet Entry"><i class="glyphicon glyphicon-pencil"></i></a>
@@ -156,7 +162,15 @@
 
             <br />
             <i>
-                <strong>Total Hours: @totalHours</strong> /
+                @if (totalMins > 0)
+                {
+                    displayTotalHours = (decimal)totalHours + ((decimal)totalMins / 60);
+                }
+                else
+                {
+                    displayTotalHours = totalHours;
+                }
+                <strong>Total Hours: @displayTotalHours.ToString("#.##")</strong> /
                 <strong>Total Hourly Income: @totalIncome.ToString("C")</strong> /
                 <strong>Total Quoted: @totalQuoted.ToString("C")</strong> /
                 <strong>Total Income: @((totalQuoted + Convert.ToDouble(totalIncome)).ToString("C"))</strong>
@@ -164,11 +178,13 @@
 
         </li>
 
-                total += totalQuoted + Convert.ToDouble(totalIncome);
+        total += totalQuoted + Convert.ToDouble(totalIncome);
 
     }
 
 </ul>
+
+
 
 <h4 style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #999;" class="text-right">
     Overall Total: @total.ToString("C")
