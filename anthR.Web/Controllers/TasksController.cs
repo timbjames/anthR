@@ -32,7 +32,7 @@ namespace anthR.Web.Controllers
                             t.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
                             || 
                             t.StaffOnTasks.Where(st => st.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Any()
-                            || !string.IsNullOrEmpty(all)
+                            || (!string.IsNullOrEmpty(all) && all.Equals("true", StringComparison.OrdinalIgnoreCase))
                         ) 
                     || t.ProjectId.Equals(id.Value) 
                     && !t.DateCompleted.HasValue 
@@ -40,7 +40,7 @@ namespace anthR.Web.Controllers
                         t.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
                         || 
                         t.StaffOnTasks.Where(st => st.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Any()
-                        || !string.IsNullOrEmpty(all)
+                        || (!string.IsNullOrEmpty(all) && all.Equals("true", StringComparison.OrdinalIgnoreCase))
                     )
                 )                
                 .OrderBy(p => p.Priority)
@@ -55,7 +55,7 @@ namespace anthR.Web.Controllers
                         t.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
                         || 
                         t.StaffOnTasks.Where(st => st.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Any()
-                        || !string.IsNullOrEmpty(all)
+                        || (!string.IsNullOrEmpty(all) && all.Equals("true", StringComparison.OrdinalIgnoreCase))
                     )
                     || t.ProjectId.Equals(id.Value) 
                     && t.DateCompleted.HasValue
@@ -63,7 +63,7 @@ namespace anthR.Web.Controllers
                         t.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
                         || 
                         t.StaffOnTasks.Where(st => st.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Any()
-                        || !string.IsNullOrEmpty(all)
+                        || (!string.IsNullOrEmpty(all) && all.Equals("true", StringComparison.OrdinalIgnoreCase))
                     )
                 )                
                 .OrderBy(p => p.Priority)
@@ -93,6 +93,9 @@ namespace anthR.Web.Controllers
             {
                 ViewBag.BreadcrumbExtra = "- All Tasks";
             }
+
+            // showing all the tasks?
+            ViewBag.ShowAll = !string.IsNullOrEmpty(all) ? all : "false";
             
             return View(anthRTask);
 

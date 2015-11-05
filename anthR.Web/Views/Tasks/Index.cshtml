@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Index";
+    string showAll = ViewBag.ShowAll;
     int? _id = null;
     // get project id if exists.
     if (ViewContext.RouteData.Values["id"] != null && !string.IsNullOrEmpty(ViewContext.RouteData.Values["id"].ToString()))
@@ -19,12 +20,13 @@
         |
         @if (string.IsNullOrEmpty(Request["completed"]))
         {
-            @Html.RawActionLink("Completed Tasks", "Index", "Tasks", new { completed = true }, new { @class = "btn btn-xs btn-primary" })
+            @Html.RawActionLink("Completed Tasks", "Index", "Tasks", new { completed = true, all = showAll }, new { @class = "btn btn-xs btn-primary" })
         }
         else
         {
-            @Html.RawActionLink("Live Tasks", "Index", "Tasks", null, new { @class = "btn btn-xs btn-primary" })
-        }        
+            @Html.RawActionLink("Live Tasks", "Index", "Tasks", new { all = showAll }, new { @class = "btn btn-xs btn-primary" })
+        }                
+        <input id="all" name="all" type="checkbox" @(showAll.Equals("true", StringComparison.OrdinalIgnoreCase) ? "checked" : "") /> Show all tasks for project
     </div>
         
     <div class="col-sm-6">
@@ -255,6 +257,16 @@
                     $('body').append($modal.append($modalInner));
                 });
 
+            });
+
+            $(document).on('change', '#all', function () {
+                var href = window.location.pathname;
+                var query = window.location.search.replace(/([?&]all)=[^?&]+/, '');
+                var isChecked = $(this).is(':checked');
+                console.log(href);
+                console.log(query);
+                href = href.replace(/([?&]all)=[^?&]+/, '');
+                window.location = href + query + '&all=' + isChecked;
             });
 
         });
