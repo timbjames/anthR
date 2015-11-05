@@ -26,7 +26,7 @@
         {
             @Html.RawActionLink("Live Tasks", "Index", "Tasks", new { all = showAll }, new { @class = "btn btn-xs btn-primary" })
         }                
-        <input id="all" name="all" type="checkbox" @(showAll.Equals("true", StringComparison.OrdinalIgnoreCase) ? "checked" : "") /> Show all tasks for project
+        <input id="all" name="all" type="checkbox" @(showAll.Equals("true", StringComparison.OrdinalIgnoreCase) ? "checked" : "") /> Show all tasks for project(s)
     </div>
         
     <div class="col-sm-6">
