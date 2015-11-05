@@ -262,11 +262,9 @@
             $(document).on('change', '#all', function () {
                 var href = window.location.pathname;
                 var query = window.location.search.replace(/([?&]all)=[^?&]+/, '');
-                var isChecked = $(this).is(':checked');
-                console.log(href);
-                console.log(query);
+                var isChecked = $(this).is(':checked');               
                 href = href.replace(/([?&]all)=[^?&]+/, '');
-                window.location = href + query + '&all=' + isChecked;
+                window.location = href + query + (query === '' ? '?' : '&') + 'all=' + isChecked;
             });
 
         });
