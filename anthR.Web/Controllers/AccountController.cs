@@ -18,10 +18,10 @@ namespace anthR.Web.Controllers
         private anthRContext _db = new anthRContext();
 
         // GET: Account
-        public ActionResult Index()
-        {
-            return View();
-        }
+        //public ActionResult Index()
+        //{
+        //    return View();
+        //}
 
         [AllowAnonymous]
         public ActionResult LogOn()

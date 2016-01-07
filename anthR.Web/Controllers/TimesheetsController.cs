@@ -156,31 +156,38 @@ namespace anthR.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<ActionResult> Show(int? id, int? month)
+        public async Task<ActionResult> Show(int? id, int? month, int? year)
         {
 
             // show the timesheet based on either the month, day or year
             IQueryable<MasterSite> masterSites = null;
 
+            // set the default month value if it is not set
             if (!month.HasValue)
             {
                 month = 1;
             }
+
+            // set the default year value if it is not set
+            if (!year.HasValue)
+            {
+                year = DateTime.Now.Year;
+            }
             
-            int daysInMonth = DateTime.DaysInMonth(DateTime.UtcNow.Year, month.Value);
-            DateTime startDate = new DateTime(DateTime.Now.Year, month.Value, 1);
-            DateTime endDate = new DateTime(DateTime.Now.Year, month.Value, daysInMonth, 23,59,59);
+            // get the days in the month
+            int daysInMonth = DateTime.DaysInMonth(year.Value, month.Value);
+
+            // set the start and end dates
+            DateTime startDate = new DateTime(year.Value, month.Value, 1);
+            DateTime endDate = new DateTime(year.Value, month.Value, daysInMonth, 23,59,59);
+
             var q = _db.MasterSite
-                .Where(ms => ms.Projects
-                    .Where(p => p.Tasks
-                        .Where(t => t.Timesheet.Where(ts => ts.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)
-                            && ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()).Any());
+                .Where(ms => ms.Projects.Any(p => p.Tasks.Any(t => t.Timesheet.Any(ts => ts.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)
+                            && ts.DateRecorded >= startDate && ts.DateRecorded <= endDate))));
 
             masterSites = _db.MasterSite
-                .Where(ms => ms.Projects
-                    .Where(p => p.Tasks
-                        .Where(t => t.Timesheet.Where(ts => ts.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
-                            && ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()).Any());
+                .Where(ms => ms.Projects.Any(p => p.Tasks.Any(t => t.Timesheet.Any(ts => ts.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) 
+                            && ts.DateRecorded >= startDate && ts.DateRecorded <= endDate))));
                         
             ViewBag.StaffId = new SelectList(_db.Staff.ToList(), "Id", "Name");
 
@@ -188,25 +195,34 @@ namespace anthR.Web.Controllers
 
         }
 
-        public ActionResult EmailTimesheet(int? id, int? month, int? email, string me)
+        public ActionResult EmailTimesheet(int? id, int? month, int? year, int? email, string me)
         {
 
             // show the timesheet based on either the month, day or year
             IQueryable<MasterSite> masterSites = null;
 
+            // set the default month if it is not set
             if (!month.HasValue)
             {
                 month = 1;
             }
+
+            // set the default year if it is not set
+            if (!year.HasValue)
+            {
+                year = DateTime.Now.Year;
+            }
             
-            int daysInMonth = DateTime.DaysInMonth(DateTime.UtcNow.Year, month.Value);
-            DateTime startDate = new DateTime(DateTime.Now.Year, month.Value, 1);
-            DateTime endDate = new DateTime(DateTime.Now.Year, month.Value, daysInMonth, 23, 59, 59);
+            // get the days in the month
+            int daysInMonth = DateTime.DaysInMonth(year.Value, month.Value);
+
+            // set the start and end dates
+            DateTime startDate = new DateTime(year.Value, month.Value, 1);
+            DateTime endDate = new DateTime(year.Value, month.Value, daysInMonth, 23, 59, 59);
+
             masterSites = _db.MasterSite
-                .Where(ms => ms.Projects
-                    .Where(p => p.Tasks
-                        .Where(t => t.Timesheet.Where(ts => ts.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) &&
-                            ts.DateRecorded >= startDate && ts.DateRecorded <= endDate).Any()).Any()).Any());
+                .Where(ms => ms.Projects.Any(p => p.Tasks.Any(t => t.Timesheet.Any(ts => ts.Staff.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase) &&
+                            ts.DateRecorded >= startDate && ts.DateRecorded <= endDate))));
 
             // need to load up the html from the Show action and email it out
             var body = anthR.Utils.IO.Razor.RenderViewToString(this, "Show", masterSites.ToList());
@@ -215,11 +231,11 @@ namespace anthR.Web.Controllers
             SmtpClient smtpClient = null;
 
             // need to get the staff email from the email id
-            var staffEmail = _db.Staff.Where(s => s.Id.Equals(email.Value)).FirstOrDefault().Email;
+            var staffEmail = _db.Staff.FirstOrDefault(s => s.Id.Equals(email.Value)).Email;
             var myEmail = string.Empty;
            
             // get my email
-            myEmail = _db.Staff.Where(s => s.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).FirstOrDefault().Email;
+            myEmail = _db.Staff.FirstOrDefault(s => s.Username.Equals(User.Identity.Name, StringComparison.OrdinalIgnoreCase)).Email;
                         
             try
             {

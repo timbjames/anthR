@@ -3,7 +3,7 @@
 @{
     if (!string.IsNullOrEmpty(Request["email"]))
     {
-        Layout = null;        
+        Layout = null;
     }
     decimal displayTotalHours = 0;
     int totalHours = 0;
@@ -13,9 +13,15 @@
     double total = 0;
 
     int month = int.Parse(Request["month"].ToString());
-    int daysInMonth = DateTime.DaysInMonth(DateTime.UtcNow.Year, month);
-    DateTime startDate = new DateTime(DateTime.Now.Year, month, 1);
-    DateTime endDate = new DateTime(DateTime.Now.Year, month, daysInMonth, 23, 59, 59);
+    int year = DateTime.UtcNow.Year;
+    if (Request["year"] != null)
+    {
+        year = int.Parse(Request["year"].ToString());
+    }
+
+    int daysInMonth = DateTime.DaysInMonth(year, month);
+    DateTime startDate = new DateTime(year, month, 1);
+    DateTime endDate = new DateTime(year, month, daysInMonth, 23, 59, 59);
 
 }
 
@@ -42,7 +48,7 @@
                     </label>
                 </div>
                 @Html.RawActionLink("<i class=\"glyphicon glyphicon-send\"></i> Send Email", "EmailTimesheet", "Timesheets",
-                new { controller = "Timesheets", month = month, email = "yes" },
+                new { controller = "Timesheets", month = month, year = year, email = "yes" },
                 new { @class = "btn btn-sm btn-primary", target = "_blank", id = "emailLink" })
             </form>
         </div>

@@ -182,7 +182,6 @@
     <Compile Include="Controllers\NotesController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\TimesheetsController.cs" />
-    <Compile Include="Controllers\ToDoController.cs" />
     <Compile Include="Extensions\HtmlExtensions.cs" />
     <Compile Include="Extensions\JavaScriptMilliseconds.cs" />
     <Compile Include="Global.asax.cs">
@@ -435,17 +434,6 @@
     <Content Include="Views\MasterSite\Create.cshtml" />
     <Content Include="Views\MasterSite\Index.cshtml" />
     <Content Include="Views\MasterSite\_ViewStart.cshtml" />
-    <Content Include="Views\Todo\Components\PriorityList\Default.cshtml" />
-    <Content Include="Views\Todo\Components\PriorityList\PVC.cshtml" />
-    <Content Include="Views\Todo\Create.cshtml" />
-    <Content Include="Views\Todo\Delete.cshtml" />
-    <Content Include="Views\Todo\Details.cshtml" />
-    <Content Include="Views\Todo\Edit.cshtml" />
-    <Content Include="Views\Todo\Error.cshtml" />
-    <Content Include="Views\Todo\Index.cshtml" />
-    <Content Include="Views\Todo\IndexFinal.cshtml" />
-    <Content Include="Views\Todo\IndexStarter.cshtml" />
-    <Content Include="Views\Todo\_ViewStart.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
